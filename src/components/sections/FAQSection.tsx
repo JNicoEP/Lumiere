@@ -65,8 +65,8 @@ export const FAQSection: React.FC = () => {
                       ? 'bg-[#12121E] border-violet-700/60'
                       : 'bg-[#0A0A12] border-violet-950/80 hover:border-violet-800/60'
                     : isOpen
-                    ? 'bg-indigo-50/80 border-indigo-300'
-                    : 'bg-white border-indigo-100 hover:border-indigo-200'
+                    ? 'bg-indigo-50/90 border-indigo-300 shadow-md'
+                    : 'bg-white border-slate-200/90 hover:border-indigo-300 shadow-sm'
                 }`}
               >
                 <button
@@ -74,7 +74,11 @@ export const FAQSection: React.FC = () => {
                   onClick={() => toggle(idx)}
                   className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4"
                 >
-                  <span className="font-serif text-lg sm:text-xl font-semibold text-violet-200">
+                  <span
+                    className={`font-serif text-lg sm:text-xl font-semibold transition-colors ${
+                      isDark ? 'text-violet-200' : 'text-slate-900'
+                    }`}
+                  >
                     {faq.q}
                   </span>
                   <div
@@ -91,7 +95,13 @@ export const FAQSection: React.FC = () => {
                 </button>
 
                 {isOpen && (
-                  <div className="px-5 sm:px-6 pb-6 pt-1 text-xs sm:text-sm leading-relaxed text-slate-300 border-t border-violet-900/20">
+                  <div
+                    className={`px-5 sm:px-6 pb-6 pt-3 text-xs sm:text-sm leading-relaxed border-t transition-colors ${
+                      isDark
+                        ? 'text-slate-300 border-violet-900/30'
+                        : 'text-slate-700 border-indigo-100'
+                    }`}
+                  >
                     <p>{faq.a}</p>
                   </div>
                 )}
@@ -101,19 +111,29 @@ export const FAQSection: React.FC = () => {
         </div>
 
         <div
-          className={`p-5 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-4 ${
-            isDark ? 'bg-[#0E0E18] border-violet-900/50' : 'bg-indigo-50/60 border-indigo-200'
+          className={`p-5 sm:p-6 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-4 transition-colors ${
+            isDark
+              ? 'bg-[#0E0E18] border-violet-900/50'
+              : 'bg-white border-indigo-200 shadow-sm'
           }`}
         >
           <div className="text-center sm:text-left">
-            <h4 className="font-serif text-lg font-semibold">¿Tienes una consulta específica sobre tu cabello?</h4>
-            <p className="text-xs text-slate-400">Puedes escribirle a Valentina por WhatsApp y enviarle una foto de referencia.</p>
+            <h4
+              className={`font-serif text-lg font-semibold ${
+                isDark ? 'text-white' : 'text-slate-900'
+              }`}
+            >
+              ¿Tienes una consulta específica sobre tu cabello?
+            </h4>
+            <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              Puedes escribirle a Valentina por WhatsApp y enviarle una foto de referencia.
+            </p>
           </div>
           <a
             href="https://wa.me/34600123456?text=Hola%20Valentina,%20tengo%20una%20consulta%20sobre%20un%20servicio%20a%20domicilio%20de%20Lumi%C3%A8re"
             target="_blank"
             rel="noreferrer"
-            className="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-violet-600 hover:bg-violet-500 text-white shrink-0 shadow-md flex items-center gap-1.5"
+            className="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-violet-600 hover:bg-violet-500 text-white shrink-0 shadow-md flex items-center gap-1.5 transition-all"
           >
             <span>💬</span> Consultar a Valentina
           </a>

@@ -50,6 +50,7 @@ export const SalonProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isBookingsModalOpen, setIsBookingsModalOpen] = useState(false);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
 
+  // Sync initial theme with HTML root class
   useEffect(() => {
     const root = document.documentElement;
     if (isDark) {
@@ -59,7 +60,19 @@ export const SalonProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, [isDark]);
 
-  const toggleTheme = () => setIsDark((prev) => !prev);
+  // Synchronous theme toggle for instant DOM reflection in View Transitions API
+  const toggleTheme = () => {
+    setIsDark((prev) => {
+      const next = !prev;
+      const root = document.documentElement;
+      if (next) {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+      return next;
+    });
+  };
 
   const updateService = (updated: ServiceItem) => {
     setServices((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));

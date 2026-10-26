@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { Lottie, LottieHandle } from 'lottie-react';
 import dayNightAnimation from '../../assets/day-night.json';
 import { useSalon } from '../../context/SalonContext';
@@ -38,7 +39,7 @@ export const ThemeToggleLottie: React.FC = () => {
   const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (isAnimating) return;
     setIsAnimating(true);
-    setTimeout(() => setIsAnimating(false), 650);
+    setTimeout(() => setIsAnimating(false), 600);
 
     const x = e.clientX;
     const y = e.clientY;
@@ -49,9 +50,12 @@ export const ThemeToggleLottie: React.FC = () => {
 
     const doc = document as any;
 
+    // View Transitions API Circular Reveal (Nejc Furh / Chrome / Edge standard)
     if (doc.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const transition = doc.startViewTransition(() => {
-        toggleTheme();
+        flushSync(() => {
+          toggleTheme();
+        });
       });
 
       transition.ready.then(() => {
@@ -65,7 +69,7 @@ export const ThemeToggleLottie: React.FC = () => {
             clipPath,
           },
           {
-            duration: 650,
+            duration: 600,
             easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
             pseudoElement: '::view-transition-new(root)',
           }
@@ -82,9 +86,14 @@ export const ThemeToggleLottie: React.FC = () => {
       onClick={handleToggle}
       aria-label="Alternar tema oscuro y claro"
       title={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
-      className="relative w-12 h-12 rounded-full overflow-hidden border border-violet-500/40 hover:border-violet-400 shadow-lg hover:shadow-violet-600/30 flex items-center justify-center p-0 cursor-pointer bg-[#0A0A14] backdrop-blur-md hover:scale-105 active:scale-95 transition-all select-none group shrink-0"
+      className={`relative w-11 h-11 sm:w-12 sm:h-12 rounded-full overflow-hidden border transition-all duration-300 select-none group shrink-0 flex items-center justify-center p-0 cursor-pointer shadow-md hover:scale-105 active:scale-95 ${
+        isDark
+          ? 'border-violet-500/50 shadow-violet-950/60'
+          : 'border-indigo-300/80 shadow-indigo-300/40'
+      }`}
     >
-      <div className="w-[115%] h-[115%] flex items-center justify-center pointer-events-none">
+      {/* Scaled to 190% so the inner 315px circle graphic fills 100% of the button edge-to-edge */}
+      <div className="w-[190%] h-[190%] flex items-center justify-center pointer-events-none shrink-0">
         <Lottie
           lottieRef={lottieRef}
           src={dayNightAnimation}
@@ -93,7 +102,7 @@ export const ThemeToggleLottie: React.FC = () => {
           className="w-full h-full object-cover"
         />
       </div>
-      <span className="absolute inset-0 rounded-full border border-white/10 group-hover:border-violet-400/50 transition-colors pointer-events-none" />
+      <span className="absolute inset-0 rounded-full border border-white/20 group-hover:border-violet-400/60 transition-colors pointer-events-none" />
     </button>
   );
 };
