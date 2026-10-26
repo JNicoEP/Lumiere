@@ -20,8 +20,8 @@ export const Footer: React.FC = () => {
             <Sparkles className="w-4 h-4 text-white" />
           </div>
           <div>
-            <p className="font-serif text-lg font-semibold text-white tracking-widest">
-              L&apos;ATELIER VIOLETTE
+            <p className="font-serif text-lg font-semibold text-white tracking-[0.2em]">
+              LUMIÈRE
             </p>
             <p className="text-xs text-indigo-300">
               Alta Peluquería Privada a Domicilio — Estilista: {SOLE_STYLIST.name}

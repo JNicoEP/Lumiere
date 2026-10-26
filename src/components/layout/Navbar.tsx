@@ -30,8 +30,8 @@ export const Navbar: React.FC = () => {
             <Sparkles className="w-5 h-5 text-white" />
           </div>
           <div>
-            <span className="font-serif text-xl sm:text-2xl tracking-[0.18em] font-semibold block leading-none bg-gradient-to-r from-indigo-300 via-violet-400 to-indigo-400 bg-clip-text text-transparent">
-              L&apos;ATELIER VIOLETTE
+            <span className="font-serif text-xl sm:text-2xl tracking-[0.2em] font-semibold block leading-none bg-gradient-to-r from-indigo-300 via-violet-400 to-indigo-400 bg-clip-text text-transparent">
+              LUMIÈRE
             </span>
             <span
               className={`text-[10px] uppercase tracking-[0.26em] flex items-center gap-1 mt-1 ${

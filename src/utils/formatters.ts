@@ -30,7 +30,7 @@ export function buildWhatsAppBookingUrl(booking: BookingRecord, stylistName: str
     : '';
 
   const message =
-    `✨ *CONFIRMACIÓN DE CITA A DOMICILIO — L'ATELIER VIOLETTE*%0A` +
+    `✨ *CONFIRMACIÓN DE CITA A DOMICILIO — LUMIÈRE*%0A` +
     `----------------------------------%0A` +
     `🔖 *Código de Turno:* ${booking.id}%0A` +
     `👩‍🎨 *Estilista:* ${stylistName}%0A` +

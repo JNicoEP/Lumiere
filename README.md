@@ -1,4 +1,4 @@
-# L'ATELIER VIOLETTE — Haute Coiffure Privée (Servicio Exclusivo a Domicilio)
+# LUMIÈRE — Haute Coiffure Privée (Servicio Exclusivo a Domicilio)
 
 Plataforma web e interactiva de reservas a domicilio y gestión interna (CMS) desarrollada con **React 18, TypeScript, Vite y Tailwind CSS** bajo una arquitectura modular y escalable.
 
