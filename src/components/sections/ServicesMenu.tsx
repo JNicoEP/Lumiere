@@ -5,7 +5,14 @@ import { ServiceCategory } from '../../types/salon.types';
 import { CATEGORY_LABELS } from '../../data/initialData';
 
 export const ServicesMenu: React.FC = () => {
-  const { isDark, services, selectedServiceIds, toggleSelectService } = useSalon();
+  const {
+    isDark,
+    services,
+    selectedServiceIds,
+    toggleSelectService,
+    clearSelectedServices,
+    setBookingStep
+  } = useSalon();
   const [activeFilter, setActiveFilter] = useState<'todos' | ServiceCategory>('todos');
 
   const filteredServices =
@@ -19,6 +26,10 @@ export const ServicesMenu: React.FC = () => {
     'cortes',
     'hidratacion'
   ];
+
+  const selectedServices = services.filter((s) => selectedServiceIds.includes(s.id));
+  const subtotal = selectedServices.reduce((acc, s) => acc + s.price, 0);
+  const totalDuration = selectedServices.reduce((acc, s) => acc + s.duration, 0);
 
   return (
     <section id="servicios" className="py-20 border-b border-violet-900/30">
@@ -34,7 +45,7 @@ export const ServicesMenu: React.FC = () => {
           <p className={`text-sm sm:text-base ${isDark ? 'text-[#C8C8D8]' : 'text-slate-600'}`}>
             Selecciona uno o más rituales de <strong>Peinados para Eventos</strong>,{' '}
             <strong>Cortes de Pelo</strong> o <strong>Hidratación Profunda</strong>. Todos los
-            servicios incluyen traslado y equipamiento profesional en tu domicilio.
+            servicios que elijas se reflejarán automáticamente en tu agenda para apartar tu cita.
           </p>
         </div>
 
@@ -129,6 +140,10 @@ export const ServicesMenu: React.FC = () => {
 
                   <button
                     type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleSelectService(service.id);
+                    }}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-all ${
                       isSelected
                         ? 'bg-violet-600 text-white shadow-md shadow-violet-900/50'
@@ -139,7 +154,7 @@ export const ServicesMenu: React.FC = () => {
                   >
                     {isSelected ? (
                       <>
-                        <Check className="w-3.5 h-3.5" /> En tu Cita
+                        <Check className="w-3.5 h-3.5" /> En tu Agenda
                       </>
                     ) : (
                       <>
@@ -155,22 +170,35 @@ export const ServicesMenu: React.FC = () => {
 
         {/* Bottom Floating Summary Bar inside section */}
         {selectedServiceIds.length > 0 && (
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl border border-violet-600/50 bg-gradient-to-r from-[#141126] via-[#1D163B] to-[#141126] text-white shadow-xl">
-            <div className="text-center sm:text-left">
-              <p className="text-xs uppercase tracking-[0.2em] text-indigo-300">
-                Selección activa para tu cita a domicilio
+          <div className="mt-10 flex flex-col md:flex-row items-center justify-between gap-4 p-5 sm:p-6 rounded-3xl border border-violet-500/50 bg-gradient-to-r from-[#141126] via-[#1D163B] to-[#141126] text-white shadow-2xl">
+            <div className="text-center md:text-left space-y-1">
+              <span className="text-[11px] uppercase tracking-[0.22em] text-violet-400 font-bold block">
+                ✓ Reflejado en tu Agenda a Domicilio
+              </span>
+              <p className="text-base sm:text-lg font-serif font-semibold">
+                {selectedServices.map((s) => s.name).join(' + ')}
               </p>
-              <p className="text-sm sm:text-base font-medium">
-                Has seleccionado <strong>{selectedServiceIds.length}</strong> servicio(s) para tu
-                visita privada.
+              <p className="text-xs text-indigo-200">
+                Total: <strong>${subtotal}</strong> • Duración estimada: <strong>{totalDuration} min</strong> • Traslado incluido
               </p>
             </div>
-            <a
-              href="#agenda"
-              className="px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest bg-violet-600 hover:bg-violet-500 text-white shadow-lg transition-all"
-            >
-              Continuar a Fecha y Hora →
-            </a>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={clearSelectedServices}
+                className="px-4 py-2.5 rounded-full text-xs font-semibold text-slate-400 hover:text-white border border-violet-900/80 hover:border-violet-700 transition-colors"
+              >
+                Limpiar selección
+              </button>
+              <a
+                href="#agenda"
+                onClick={() => setBookingStep(2)}
+                className="px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#8B5CF6] text-white shadow-lg shadow-violet-900/50 transition-all flex items-center gap-2"
+              >
+                <span>Continuar a Fecha y Hora en la Agenda</span>
+                <span>→</span>
+              </a>
+            </div>
           </div>
         )}
       </div>

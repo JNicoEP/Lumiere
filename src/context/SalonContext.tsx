@@ -33,6 +33,8 @@ interface SalonContextType {
   setIsBookingsModalOpen: (open: boolean) => void;
   isAdminModalOpen: boolean;
   setIsAdminModalOpen: (open: boolean) => void;
+  bookingStep: 1 | 2 | 3;
+  setBookingStep: (step: 1 | 2 | 3) => void;
 }
 
 const SalonContext = createContext<SalonContextType | undefined>(undefined);
@@ -43,18 +45,10 @@ export const SalonProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [promo, setPromo] = useLocalStorage<PromoConfig>('atelier_violette_promo_v1', INITIAL_PROMO);
   const [bankInfo, setBankInfo] = useLocalStorage<BankPaymentInfo>('lumiere_bank_info_v1', DEFAULT_BANK_INFO);
   const [bookings, setBookings] = useLocalStorage<BookingRecord[]>('atelier_violette_bookings_v1', []);
-  const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>(['hidratacion-1']);
+  const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
+  const [bookingStep, setBookingStep] = useState<1 | 2 | 3>(1);
   const [isBookingsModalOpen, setIsBookingsModalOpen] = useState(false);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
-
-  // Ensure initial default selection exists
-  useEffect(() => {
-    if (selectedServiceIds.length === 0 && services.length > 0) {
-      setSelectedServiceIds([services[0].id]);
-    } else if (selectedServiceIds.includes('hidratacion-1')) {
-      setSelectedServiceIds(['hidra-1']);
-    }
-  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -139,7 +133,9 @@ export const SalonProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         isBookingsModalOpen,
         setIsBookingsModalOpen,
         isAdminModalOpen,
-        setIsAdminModalOpen
+        setIsAdminModalOpen,
+        bookingStep,
+        setBookingStep
       }}
     >
       {children}

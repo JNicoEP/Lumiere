@@ -25,11 +25,12 @@ export const BookingEngine: React.FC = () => {
     toggleSelectService,
     promo,
     addBooking,
-    bankInfo
+    bankInfo,
+    bookingStep: step,
+    setBookingStep: setStep
   } = useSalon();
 
   const availableDays = useMemo(() => getNextAvailableDays(7), []);
-  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selectedDate, setSelectedDate] = useState<string>(availableDays[0]?.iso || '');
   const [selectedTime, setSelectedTime] = useState<string>('11:00');
 
@@ -101,7 +102,7 @@ export const BookingEngine: React.FC = () => {
       setAppliedCoupon(clean);
       setCouponFeedback({
         type: 'ok',
-        msg: `¡Código "${clean}" aplicado! Obtienes ${promo.discountPercent}% de descuento.`
+        msg: `¡Descuento de ${promo.discountPercent}% aplicado con éxito!`
       });
     } else {
       setAppliedCoupon(null);
@@ -143,9 +144,9 @@ export const BookingEngine: React.FC = () => {
 
   return (
     <section id="agenda" className="py-20 sm:py-24">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Heading */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        {/* Section Heading */}
+        <div className="text-center space-y-4 max-w-2xl mx-auto">
           <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-violet-400 font-semibold">
             <Calendar className="w-3.5 h-3.5" /> Reserva Online en 3 Pasos
           </span>
@@ -154,7 +155,7 @@ export const BookingEngine: React.FC = () => {
           </h2>
           <p className={`text-sm sm:text-base ${isDark ? 'text-[#C8C8D8]' : 'text-slate-600'}`}>
             Sincronización en tiempo real con la agenda de <strong>{SOLE_STYLIST.name}</strong>.
-            Elige tus servicios de Peinados para Eventos, Cortes de Pelo o Hidratación.
+            Los servicios que elijas se actualizan automáticamente en cada paso.
           </p>
         </div>
 
@@ -248,25 +249,30 @@ export const BookingEngine: React.FC = () => {
                     {copiedAlias ? <><Check className="w-3 h-3 text-emerald-300" /> ¡Copiado!</> : <><Copy className="w-3 h-3" /> Copiar</>}
                   </button>
                 </div>
-                <p className="text-[11px] text-slate-400"><strong>CBU/CVU:</strong> <span className="font-mono">{bankInfo.cbu}</span></p>
+                <p className="text-slate-400 text-[11px]"><strong>CBU / CVU:</strong> <span className="font-mono">{bankInfo.cbu}</span></p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="space-y-3">
               <a
                 href={buildWhatsAppBookingUrl(confirmedBooking, SOLE_STYLIST.name)}
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 py-3.5 px-6 rounded-full text-xs font-bold uppercase tracking-widest text-center text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:opacity-95 shadow-lg flex items-center justify-center gap-2"
+                className="w-full py-4 rounded-full text-xs font-bold uppercase tracking-widest text-center text-white bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 shadow-xl shadow-emerald-950/50 flex items-center justify-center gap-2 transition-all"
               >
-                <span>💬</span> Enviar Comprobante por WhatsApp
+                <MessageSquare className="w-4 h-4" />
+                Enviar Comprobante de Seña a Valentina por WhatsApp
               </a>
+
               <button
                 type="button"
-                onClick={() => setConfirmedBooking(null)}
-                className="py-3.5 px-6 rounded-full text-xs font-bold uppercase tracking-widest border border-violet-700 text-violet-300 hover:bg-violet-950/40"
+                onClick={() => {
+                  setConfirmedBooking(null);
+                  setStep(1);
+                }}
+                className="w-full py-2.5 text-xs text-slate-400 hover:text-white"
               >
-                Agendar Otro Turno
+                Agendar otra cita
               </button>
             </div>
           </div>
@@ -289,12 +295,16 @@ export const BookingEngine: React.FC = () => {
                 <button
                   key={s.num}
                   type="button"
-                  onClick={() => setStep(s.num as 1 | 2 | 3)}
+                  onClick={() => {
+                    if (s.num === 1) setStep(1);
+                    if (s.num === 2 && selectedServices.length > 0) setStep(2);
+                    if (s.num === 3 && selectedServices.length > 0) setStep(3);
+                  }}
                   className={`py-3 px-4 rounded-2xl text-xs sm:text-sm font-semibold transition-all border text-center ${
                     step === s.num
                       ? 'bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] text-white border-violet-500 shadow-md'
                       : isDark
-                      ? 'bg-[#08080C] text-slate-400 border-violet-900/40'
+                      ? 'bg-[#08080C] text-slate-400 border-violet-900/40 hover:border-violet-700'
                       : 'bg-indigo-50/60 text-slate-600 border-indigo-200'
                   }`}
                 >
@@ -315,6 +325,41 @@ export const BookingEngine: React.FC = () => {
                   </span>
                 </div>
 
+                {/* Live Feedback Banner from Services Menu Selection */}
+                {selectedServices.length > 0 ? (
+                  <div className="p-4 rounded-2xl bg-gradient-to-r from-violet-950/80 via-[#18132e] to-[#121220] border border-violet-500/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                      <div>
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-violet-300 block">
+                          Servicios reflejados en tu agenda ({selectedServices.length}):
+                        </span>
+                        <p className="text-sm font-medium text-white">
+                          {selectedServices.map((s) => s.name).join(' + ')} —{' '}
+                          <strong className="text-violet-300">${subtotal}</strong> ({totalDuration} min)
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setStep(2)}
+                      className="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-violet-600 hover:bg-violet-500 text-white shadow-md transition-all flex items-center gap-1.5 shrink-0"
+                    >
+                      <span>Avanzar a Día y Hora →</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    className={`p-4 rounded-2xl border text-center text-xs ${
+                      isDark
+                        ? 'bg-[#08080C] border-violet-900/40 text-slate-400'
+                        : 'bg-indigo-50/60 border-indigo-200 text-slate-600'
+                    }`}
+                  >
+                    Selecciona a continuación los rituales que deseas para tu visita privada a domicilio (opcional: también puedes elegirlos desde el menú de servicios superior).
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {services.map((srv) => {
                     const active = selectedServiceIds.includes(srv.id);
@@ -325,8 +370,8 @@ export const BookingEngine: React.FC = () => {
                         className={`p-4 rounded-2xl border cursor-pointer transition-all flex items-start justify-between gap-4 ${
                           active
                             ? isDark
-                              ? 'bg-[#19152E] border-violet-500'
-                              : 'bg-indigo-50 border-violet-600'
+                              ? 'bg-[#19152E] border-violet-500 shadow-md ring-1 ring-violet-500/40'
+                              : 'bg-indigo-50 border-violet-600 shadow-md ring-1 ring-violet-400'
                             : isDark
                             ? 'bg-[#08080C] border-violet-900/40 hover:border-violet-700'
                             : 'bg-white border-indigo-100 hover:border-indigo-300'
@@ -357,7 +402,9 @@ export const BookingEngine: React.FC = () => {
                     onClick={() => setStep(2)}
                     className="px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] disabled:opacity-40 shadow-lg"
                   >
-                    Siguiente: Elegir Día y Hora →
+                    {selectedServices.length === 0
+                      ? 'Selecciona al menos 1 servicio para continuar'
+                      : 'Siguiente: Elegir Día y Hora →'}
                   </button>
                 </div>
               </div>
@@ -366,6 +413,24 @@ export const BookingEngine: React.FC = () => {
             {/* STEP 2: DATE, TIME & SOLE STYLIST */}
             {step === 2 && (
               <div className="space-y-8">
+                {/* Selected Services Recap Pill */}
+                {selectedServices.length > 0 && (
+                  <div className="p-3.5 rounded-2xl border border-violet-800/60 bg-violet-950/40 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-violet-300">Servicios a domicilio:</span>
+                      <span className="text-slate-200">{selectedServices.map((s) => s.name).join(' + ')}</span>
+                      <span className="text-violet-400 font-bold">(${subtotal} • {totalDuration} min)</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setStep(1)}
+                      className="text-[11px] text-violet-400 hover:underline font-semibold"
+                    >
+                      ← Modificar servicios
+                    </button>
+                  </div>
+                )}
+
                 {/* Stylist Profile Card */}
                 <div
                   className={`p-4 rounded-2xl border flex items-center gap-4 ${
@@ -455,7 +520,7 @@ export const BookingEngine: React.FC = () => {
                     onClick={() => setStep(1)}
                     className="px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest border border-violet-800 text-indigo-300"
                   >
-                    ← Volver
+                    ← Volver a Servicios
                   </button>
                   <button
                     type="button"
@@ -520,7 +585,7 @@ export const BookingEngine: React.FC = () => {
 
                   <div>
                     <label className="text-xs font-semibold uppercase tracking-wider block mb-1.5">
-                      Dirección Exacta del Domicilio o Suite de Hotel *
+                      Dirección Completa (Calle, Piso, Depto o Hotel) *
                     </label>
                     <div className="relative">
                       <MapPin className="w-4 h-4 text-violet-400 absolute left-3.5 top-3.5" />
@@ -529,7 +594,7 @@ export const BookingEngine: React.FC = () => {
                         required
                         value={clientAddress}
                         onChange={(e) => setClientAddress(e.target.value)}
-                        placeholder="Calle, Número, Piso/Puerta o Nombre del Hotel y Habitación"
+                        placeholder="Ej. Av. Alvear 1891, Recoleta (Piso 4B)"
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border text-sm focus:outline-none focus:border-violet-500 ${
                           isDark
                             ? 'bg-[#08080C] border-violet-900/60 text-white'
@@ -541,59 +606,53 @@ export const BookingEngine: React.FC = () => {
 
                   <div>
                     <label className="text-xs font-semibold uppercase tracking-wider block mb-1.5">
-                      Indicaciones Adicionales (Largo del pelo, timbre, etc.)
+                      Notas especiales o requerimientos (Opcional)
                     </label>
-                    <div className="relative">
-                      <MessageSquare className="w-4 h-4 text-violet-400 absolute left-3.5 top-3.5" />
-                      <textarea
-                        rows={2}
-                        value={clientNotes}
-                        onChange={(e) => setClientNotes(e.target.value)}
-                        placeholder="Ej. Cabello hasta media espalda, portero 4B..."
-                        className={`w-full pl-10 pr-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:border-violet-500 ${
-                          isDark
-                            ? 'bg-[#08080C] border-violet-900/60 text-white'
-                            : 'bg-white border-indigo-200 text-slate-900'
-                        }`}
-                      />
-                    </div>
+                    <textarea
+                      rows={2}
+                      value={clientNotes}
+                      onChange={(e) => setClientNotes(e.target.value)}
+                      placeholder="Ej. Timbre no funciona, avisar por WhatsApp. Tengo cabello rizado con mechas."
+                      className={`w-full p-3 rounded-xl border text-sm focus:outline-none focus:border-violet-500 ${
+                        isDark
+                          ? 'bg-[#08080C] border-violet-900/60 text-white'
+                          : 'bg-white border-indigo-200 text-slate-900'
+                      }`}
+                    />
                   </div>
 
-                  {/* Custom Promo Word Input */}
-                  <div
-                    className={`p-4 rounded-2xl border space-y-2 ${
-                      isDark
-                        ? 'bg-[#08080C] border-violet-800/60'
-                        : 'bg-indigo-50/70 border-indigo-200'
-                    }`}
-                  >
-                    <label className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-violet-400">
-                      <Tag className="w-3.5 h-3.5" /> ¿Tienes una palabra de descuento de tu estilista?
+                  {/* Promo Coupon Input */}
+                  <div className="pt-2">
+                    <label className="text-xs font-semibold uppercase tracking-wider block mb-1.5">
+                      Palabra de Beneficio / Cupón
                     </label>
                     <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={couponInput}
-                        onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
-                        placeholder={`Ej. ${promo.code || 'HIDRATA20'}`}
-                        className={`flex-1 px-3.5 py-2 rounded-xl border text-xs font-mono uppercase ${
-                          isDark
-                            ? 'bg-[#12121E] border-violet-800 text-white'
-                            : 'bg-white border-indigo-300 text-slate-900'
-                        }`}
-                      />
+                      <div className="relative flex-1">
+                        <Tag className="w-4 h-4 text-violet-400 absolute left-3.5 top-3.5" />
+                        <input
+                          type="text"
+                          value={couponInput}
+                          onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                          placeholder="Ingresa tu cupón"
+                          className={`w-full pl-10 pr-4 py-2.5 rounded-xl border text-xs font-mono uppercase focus:outline-none focus:border-violet-500 ${
+                            isDark
+                              ? 'bg-[#08080C] border-violet-900/60 text-white'
+                              : 'bg-white border-indigo-200 text-slate-900'
+                          }`}
+                        />
+                      </div>
                       <button
                         type="button"
                         onClick={handleApplyCoupon}
-                        className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-violet-600 hover:bg-violet-500 text-white"
+                        className="px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-violet-900/60 hover:bg-violet-800 text-violet-200 border border-violet-700/50"
                       >
                         Aplicar
                       </button>
                     </div>
                     {couponFeedback && (
                       <p
-                        className={`text-xs font-medium ${
-                          couponFeedback.type === 'ok' ? 'text-emerald-400' : 'text-amber-400'
+                        className={`text-xs mt-1.5 ${
+                          couponFeedback.type === 'ok' ? 'text-emerald-400' : 'text-rose-400'
                         }`}
                       >
                         {couponFeedback.msg}
@@ -602,89 +661,78 @@ export const BookingEngine: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Summary & Seña 30% Payment Column */}
+                {/* Right Column: Pricing Breakdown & 30% Deposit with Bank Card */}
                 <div className="lg:col-span-5 space-y-4">
                   <div
                     className={`p-6 rounded-2xl border space-y-4 ${
                       isDark
-                        ? 'bg-[#08080C] border-violet-800/60'
-                        : 'bg-indigo-50/50 border-indigo-200'
+                        ? 'bg-[#08080C] border-violet-800/50'
+                        : 'bg-indigo-50/60 border-indigo-200'
                     }`}
                   >
-                    <h4 className="font-serif text-2xl font-semibold border-b border-violet-900/30 pb-2">
-                      Resumen de tu Visita
-                    </h4>
+                    <h4 className="font-serif text-xl font-semibold">Resumen de tu Visita</h4>
 
-                    <div className="text-xs space-y-1 text-slate-300">
+                    <div className="text-xs space-y-1.5 text-slate-300">
+                      <p>
+                        <strong>Fecha:</strong> {selectedDate} ({selectedTime} hs)
+                      </p>
                       <p>
                         <strong>Estilista:</strong> {SOLE_STYLIST.name}
                       </p>
                       <p>
-                        <strong>Fecha:</strong> {selectedDate} — {selectedTime} hs ({totalDuration}{' '}
-                        min)
+                        <strong>Servicios:</strong> {selectedServices.map((s) => s.name).join(', ')}
+                      </p>
+                      <p>
+                        <strong>Duración:</strong> ~{totalDuration} minutos
                       </p>
                     </div>
 
-                    <div className="space-y-2 pt-2 border-t border-violet-900/30 text-sm">
-                      {selectedServices.map((s) => (
-                        <div key={s.id} className="flex justify-between">
-                          <span>{s.name}</span>
-                          <span className="font-semibold">${s.price}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Breakdown */}
-                    <div className="space-y-2 pt-2 border-t border-violet-900/30 text-xs">
-                      <div className="flex justify-between text-slate-400">
-                        <span>Subtotal de servicios:</span>
+                    <div className="pt-3 border-t border-violet-900/30 space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Subtotal:</span>
                         <span>${subtotal.toFixed(2)}</span>
                       </div>
 
                       {promoDiscountAmount > 0 && (
-                        <div className="flex justify-between text-emerald-400 font-semibold">
-                          <span>
-                            Descuento ({promo.code} -{promo.discountPercent}%):
-                          </span>
+                        <div className="flex justify-between text-emerald-400">
+                          <span>Cupón ({appliedCoupon}):</span>
                           <span>-${promoDiscountAmount.toFixed(2)}</span>
                         </div>
                       )}
 
-                      <div className="flex justify-between text-slate-300 pt-1 border-t border-violet-900/20 font-medium">
-                        <span>Costo Total del Servicio:</span>
-                        <span className="font-bold text-white">${finalTotal.toFixed(2)}</span>
-                      </div>
-
-                      <div className="flex justify-between items-center p-3 rounded-xl bg-violet-600/20 border border-violet-500/40 text-violet-300">
-                        <span className="font-bold text-xs uppercase tracking-wider">
-                          Seña a transferir ahora (30%):
-                        </span>
-                        <span className="text-xl font-serif font-bold text-violet-300">
-                          ${depositAmount.toFixed(2)}
-                        </span>
-                      </div>
-
-                      <div className="flex justify-between text-xs text-slate-400 px-1">
-                        <span>Saldo restante en domicilio (70%):</span>
-                        <span className="font-semibold text-slate-300">
-                          ${pendingBalance.toFixed(2)}
-                        </span>
+                      <div className="flex justify-between font-bold text-base pt-2 border-t border-violet-900/30">
+                        <span>Total de Servicios:</span>
+                        <span>${finalTotal.toFixed(2)}</span>
                       </div>
                     </div>
 
-                    {/* Copyable Bank Transfer Card */}
+                    {/* Deposit Breakdown */}
+                    <div className="p-4 rounded-xl bg-violet-600/15 border border-violet-500/40 space-y-2">
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="font-bold text-violet-300">
+                          Seña para apartar fecha (30%):
+                        </span>
+                        <span className="font-serif text-xl font-bold text-violet-300">
+                          ${depositAmount.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-xs text-slate-400">
+                        <span>Saldo en tu domicilio (70%):</span>
+                        <span className="font-medium text-slate-200">${pendingBalance.toFixed(2)}</span>
+                      </div>
+                    </div>
+
+                    {/* Bank Info Card with 1-Click Copy Alias */}
                     <div
                       className={`p-3.5 rounded-xl border space-y-2 text-xs ${
                         isDark ? 'bg-[#121220] border-violet-800/60' : 'bg-white border-indigo-200'
                       }`}
                     >
-                      <div className="flex items-center justify-between font-bold text-violet-400">
-                        <span className="flex items-center gap-1.5">
-                          <CreditCard className="w-3.5 h-3.5" /> Datos para transferir la seña:
-                        </span>
-                        <span className="text-[10px] text-slate-400">{bankInfo.banco}</span>
+                      <div className="flex items-center gap-1.5 text-violet-300 font-bold">
+                        <CreditCard className="w-3.5 h-3.5" />
+                        <span>Transferencia Bancaria / Mercado Pago</span>
                       </div>
-                      <p className="text-slate-300 text-[11px]"><strong>Titular:</strong> {bankInfo.titular}</p>
+                      <p className="text-[11px] text-slate-300"><strong>Titular:</strong> {bankInfo.titular}</p>
                       <div className="flex items-center justify-between p-2 rounded-lg bg-black/40 border border-violet-900/40">
                         <div>
                           <span className="text-[10px] text-slate-400 block">Alias de transferencia:</span>
