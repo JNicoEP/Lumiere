@@ -26,18 +26,18 @@ export const Footer: React.FC = () => {
               <p className="font-serif text-xl font-semibold text-white tracking-[0.2em] leading-tight">
                 LUMIÈRE
               </p>
-              <div className="flex flex-wrap items-center gap-2.5 mt-1">
+              <div className="flex flex-wrap items-center gap-2 mt-1">
                 <span className="text-xs text-indigo-300">
                   LUMIÈRE Alta Peluquería Privada a Domicilio — Estilista: {SOLE_STYLIST.name}
                 </span>
                 <button
                   type="button"
                   onClick={() => setIsAdminModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider uppercase border border-violet-500/50 bg-violet-950/80 hover:bg-violet-900 text-violet-200 hover:text-white shadow-sm hover:border-violet-400 transition-all cursor-pointer"
-                  title="Acceso Gestor Estilista (PIN: 1234)"
+                  className="w-6 h-6 rounded-full border border-violet-500/40 bg-violet-950/80 hover:bg-violet-900 text-violet-300 hover:text-white inline-flex items-center justify-center shadow-sm hover:border-violet-400 transition-all cursor-pointer"
+                  title="Gestor Estilista (PIN: 1234)"
+                  aria-label="Gestor Estilista"
                 >
                   <Lock className="w-3 h-3 text-violet-400" />
-                  <span>Acceso Gestor</span>
                 </button>
               </div>
             </div>
