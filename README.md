@@ -1,8 +1,8 @@
-# LUMIÈRE — Haute Coiffure Privée (Servicio Exclusivo a Domicilio)
+# LUMIÈRE —  (Servicio Exclusivo a Domicilio)
 
 Plataforma web e interactiva de reservas a domicilio y gestión interna (CMS) desarrollada con **React 18, TypeScript, Vite y Tailwind CSS** bajo una arquitectura modular y escalable.
 
-## ✨ Características Principales
+## Características Principales
 
 1. **Estética Morado Gama Azul (Índigo / Violeta) + Modo Oscuro y Claro**:
    - Fondo dominante en Negro Carbono (`#08080C`) en modo oscuro y Blanco Perla (`#FAFAFC`) en modo claro.
@@ -58,17 +58,4 @@ atelier-violette-app/
             └── BookingsModal.tsx   # Panel de turnos agendados y disparo directo a WhatsApp
 ```
 
-## 🚀 Instalación y Ejecución Local
 
-1. Instalar dependencias:
-   ```bash
-   npm install
-   ```
-2. Iniciar servidor de desarrollo:
-   ```bash
-   npm run dev
-   ```
-3. Compilar para producción:
-   ```bash
-   npm run build
-   ```
