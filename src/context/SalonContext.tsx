@@ -28,6 +28,7 @@ interface SalonContextType {
   clearSelectedServices: () => void;
   bookings: BookingRecord[];
   addBooking: (booking: BookingRecord) => void;
+  deleteBooking: (id: string) => void;
   isBookingsModalOpen: boolean;
   setIsBookingsModalOpen: (open: boolean) => void;
   isAdminModalOpen: boolean;
@@ -111,6 +112,10 @@ export const SalonProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setBookings((prev) => [booking, ...prev]);
   };
 
+  const deleteBooking = (id: string) => {
+    setBookings((prev) => prev.filter((b) => b.id !== id));
+  };
+
   return (
     <SalonContext.Provider
       value={{
@@ -130,6 +135,7 @@ export const SalonProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         clearSelectedServices,
         bookings,
         addBooking,
+        deleteBooking,
         isBookingsModalOpen,
         setIsBookingsModalOpen,
         isAdminModalOpen,

@@ -1,9 +1,8 @@
 import React from 'react';
-import { CalendarCheck } from 'lucide-react';
 import { useSalon } from '../../context/SalonContext';
 
 export const MobileBottomBar: React.FC = () => {
-  const { isDark, selectedServiceIds, setIsBookingsModalOpen, bookings } = useSalon();
+  const { isDark, selectedServiceIds } = useSalon();
 
   return (
     <div
@@ -13,21 +12,12 @@ export const MobileBottomBar: React.FC = () => {
           : 'bg-white/95 border-indigo-200'
       }`}
     >
-      <button
-        type="button"
-        onClick={() => setIsBookingsModalOpen(true)}
-        className="px-3.5 py-2.5 rounded-full border border-violet-700/60 text-xs font-semibold flex items-center gap-1.5"
-      >
-        <CalendarCheck className="w-4 h-4 text-violet-400" />
-        Turnos ({bookings.length})
-      </button>
-
       <a
         href="#agenda"
-        className="flex-1 py-3 px-4 rounded-full text-xs font-bold uppercase tracking-widest text-center text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] shadow-lg flex items-center justify-center gap-1.5"
+        className="w-full py-3 px-4 rounded-full text-xs font-bold uppercase tracking-widest text-center text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] shadow-lg flex items-center justify-center gap-2"
       >
         <span>📅</span>
-        Reservar a Domicilio ({selectedServiceIds.length})
+        Agendar Cita a Domicilio {selectedServiceIds.length > 0 ? `(${selectedServiceIds.length} serv.)` : ''}
       </a>
     </div>
   );
