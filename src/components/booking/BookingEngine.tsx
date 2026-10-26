@@ -286,11 +286,11 @@ export const BookingEngine: React.FC = () => {
             }`}
           >
             {/* Stepper Header */}
-            <div className="grid grid-cols-3 gap-3 pb-8 mb-8 border-b border-violet-900/30">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 pb-6 sm:pb-8 mb-6 sm:mb-8 border-b border-violet-900/30">
               {[
-                { num: 1, title: '1. Servicios a Domicilio' },
-                { num: 2, title: '2. Día & Horario' },
-                { num: 3, title: '3. Domicilio & Seña (30%)' }
+                { num: 1, short: '1. Servicios', full: '1. Servicios a Domicilio' },
+                { num: 2, short: '2. Horario', full: '2. Día & Horario' },
+                { num: 3, short: '3. Confirmar', full: '3. Domicilio & Seña (30%)' }
               ].map((s) => (
                 <button
                   key={s.num}
@@ -300,7 +300,7 @@ export const BookingEngine: React.FC = () => {
                     if (s.num === 2 && selectedServices.length > 0) setStep(2);
                     if (s.num === 3 && selectedServices.length > 0) setStep(3);
                   }}
-                  className={`py-3 px-4 rounded-2xl text-xs sm:text-sm font-semibold transition-all border text-center ${
+                  className={`py-2.5 sm:py-3 px-2 sm:px-4 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-semibold transition-all border text-center ${
                     step === s.num
                       ? 'bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] text-white border-violet-500 shadow-md'
                       : isDark
@@ -308,7 +308,8 @@ export const BookingEngine: React.FC = () => {
                       : 'bg-indigo-50/60 text-slate-600 border-indigo-200'
                   }`}
                 >
-                  {s.title}
+                  <span className="sm:hidden">{s.short}</span>
+                  <span className="hidden sm:inline">{s.full}</span>
                 </button>
               ))}
             </div>
@@ -400,7 +401,7 @@ export const BookingEngine: React.FC = () => {
                     type="button"
                     disabled={selectedServices.length === 0}
                     onClick={() => setStep(2)}
-                    className="px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] disabled:opacity-40 shadow-lg"
+                    className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] disabled:opacity-40 shadow-lg text-center"
                   >
                     {selectedServices.length === 0
                       ? 'Selecciona al menos 1 servicio para continuar'
@@ -455,10 +456,15 @@ export const BookingEngine: React.FC = () => {
 
                 {/* Date Picker */}
                 <div className="space-y-3">
-                  <label className="text-xs font-bold uppercase tracking-widest text-indigo-300 block">
-                    Selecciona el Día de tu Visita
-                  </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold uppercase tracking-widest text-indigo-300 block">
+                      Selecciona el Día de tu Visita
+                    </label>
+                    <span className="text-[11px] text-violet-400 sm:hidden">
+                      ← Desliza los días →
+                    </span>
+                  </div>
+                  <div className="flex overflow-x-auto sm:grid sm:grid-cols-7 gap-2.5 pb-2 -mx-1 px-1 no-scrollbar">
                     {availableDays.map((d) => {
                       const active = selectedDate === d.iso;
                       return (
@@ -466,9 +472,9 @@ export const BookingEngine: React.FC = () => {
                           key={d.iso}
                           type="button"
                           onClick={() => setSelectedDate(d.iso)}
-                          className={`p-3 rounded-2xl border text-center transition-all ${
+                          className={`shrink-0 w-24 sm:w-auto p-3 rounded-2xl border text-center transition-all ${
                             active
-                              ? 'bg-gradient-to-b from-[#6D28D9] to-[#4C1D95] text-white border-violet-400 shadow-md'
+                              ? 'bg-gradient-to-b from-[#6D28D9] to-[#4C1D95] text-white border-violet-400 shadow-md ring-2 ring-violet-400/50'
                               : isDark
                               ? 'bg-[#08080C] border-violet-900/40 text-slate-300 hover:border-violet-600'
                               : 'bg-white border-indigo-200 text-slate-700 hover:bg-indigo-50'
@@ -490,7 +496,7 @@ export const BookingEngine: React.FC = () => {
                   <label className="text-xs font-bold uppercase tracking-widest text-indigo-300 block">
                     Horario de Llegada Estimado a tu Domicilio
                   </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2">
                     {AVAILABLE_TIME_SLOTS.map((slot) => {
                       const active = selectedTime === slot;
                       return (
@@ -498,34 +504,34 @@ export const BookingEngine: React.FC = () => {
                           key={slot}
                           type="button"
                           onClick={() => setSelectedTime(slot)}
-                          className={`py-3 px-4 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                          className={`py-2.5 sm:py-3 px-2 sm:px-4 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
                             active
-                              ? 'bg-violet-600 text-white border-violet-400 shadow-md'
+                              ? 'bg-violet-600 text-white border-violet-400 shadow-md ring-2 ring-violet-400/50'
                               : isDark
                               ? 'bg-[#08080C] border-violet-900/40 text-slate-300 hover:border-violet-600'
                               : 'bg-white border-indigo-200 text-slate-700'
                           }`}
                         >
-                          <Clock className="w-3.5 h-3.5" />
-                          {slot}
+                          <Clock className="w-3.5 h-3.5 shrink-0" />
+                          <span>{slot}</span>
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
-                <div className="flex justify-between pt-4">
+                <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 pt-4">
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest border border-violet-800 text-indigo-300"
+                    className="w-full sm:w-auto px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest border border-violet-800 text-indigo-300 text-center"
                   >
                     ← Volver a Servicios
                   </button>
                   <button
                     type="button"
                     onClick={() => setStep(3)}
-                    className="px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] shadow-lg"
+                    className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] shadow-lg text-center"
                   >
                     Siguiente: Dirección &amp; Confirmación →
                   </button>
@@ -553,7 +559,7 @@ export const BookingEngine: React.FC = () => {
                         value={clientName}
                         onChange={(e) => setClientName(e.target.value)}
                         placeholder="Ej. Camila Montalbán"
-                        className={`w-full pl-10 pr-4 py-3 rounded-xl border text-sm focus:outline-none focus:border-violet-500 ${
+                        className={`w-full pl-10 pr-4 py-3 rounded-xl border text-base sm:text-sm focus:outline-none focus:border-violet-500 ${
                           isDark
                             ? 'bg-[#08080C] border-violet-900/60 text-white'
                             : 'bg-white border-indigo-200 text-slate-900'
@@ -574,7 +580,7 @@ export const BookingEngine: React.FC = () => {
                         value={clientPhone}
                         onChange={(e) => setClientPhone(e.target.value)}
                         placeholder="Ej. +34 600 123 456"
-                        className={`w-full pl-10 pr-4 py-3 rounded-xl border text-sm focus:outline-none focus:border-violet-500 ${
+                        className={`w-full pl-10 pr-4 py-3 rounded-xl border text-base sm:text-sm focus:outline-none focus:border-violet-500 ${
                           isDark
                             ? 'bg-[#08080C] border-violet-900/60 text-white'
                             : 'bg-white border-indigo-200 text-slate-900'
@@ -595,7 +601,7 @@ export const BookingEngine: React.FC = () => {
                         value={clientAddress}
                         onChange={(e) => setClientAddress(e.target.value)}
                         placeholder="Ej. Av. Alvear 1891, Recoleta (Piso 4B)"
-                        className={`w-full pl-10 pr-4 py-3 rounded-xl border text-sm focus:outline-none focus:border-violet-500 ${
+                        className={`w-full pl-10 pr-4 py-3 rounded-xl border text-base sm:text-sm focus:outline-none focus:border-violet-500 ${
                           isDark
                             ? 'bg-[#08080C] border-violet-900/60 text-white'
                             : 'bg-white border-indigo-200 text-slate-900'
@@ -613,7 +619,7 @@ export const BookingEngine: React.FC = () => {
                       value={clientNotes}
                       onChange={(e) => setClientNotes(e.target.value)}
                       placeholder="Ej. Timbre no funciona, avisar por WhatsApp. Tengo cabello rizado con mechas."
-                      className={`w-full p-3 rounded-xl border text-sm focus:outline-none focus:border-violet-500 ${
+                      className={`w-full p-3 rounded-xl border text-base sm:text-sm focus:outline-none focus:border-violet-500 ${
                         isDark
                           ? 'bg-[#08080C] border-violet-900/60 text-white'
                           : 'bg-white border-indigo-200 text-slate-900'
@@ -634,7 +640,7 @@ export const BookingEngine: React.FC = () => {
                           value={couponInput}
                           onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                           placeholder="Ingresa tu cupón"
-                          className={`w-full pl-10 pr-4 py-2.5 rounded-xl border text-xs font-mono uppercase focus:outline-none focus:border-violet-500 ${
+                          className={`w-full pl-10 pr-4 py-2.5 rounded-xl border text-base sm:text-xs font-mono uppercase focus:outline-none focus:border-violet-500 ${
                             isDark
                               ? 'bg-[#08080C] border-violet-900/60 text-white'
                               : 'bg-white border-indigo-200 text-slate-900'
@@ -749,17 +755,17 @@ export const BookingEngine: React.FC = () => {
                       <p className="text-[10px] text-slate-400"><strong>CBU/CVU:</strong> <span className="font-mono">{bankInfo.cbu}</span></p>
                     </div>
 
-                    <div className="flex gap-2 pt-2">
+                    <div className="flex flex-col-reverse sm:flex-row gap-2.5 pt-2">
                       <button
                         type="button"
                         onClick={() => setStep(2)}
-                        className="px-4 py-3 rounded-full text-xs font-bold uppercase border border-violet-800 text-slate-300"
+                        className="w-full sm:w-auto px-5 py-3 rounded-full text-xs font-bold uppercase border border-violet-800 text-slate-300 text-center"
                       >
                         ← Atrás
                       </button>
                       <button
                         type="submit"
-                        className="flex-1 py-3.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#8B5CF6] shadow-lg flex items-center justify-center gap-1.5"
+                        className="w-full sm:flex-1 py-3.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#8B5CF6] shadow-lg flex items-center justify-center gap-1.5 text-center"
                       >
                         Confirmar Cita (Seña: ${depositAmount.toFixed(2)})
                       </button>

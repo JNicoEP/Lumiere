@@ -114,10 +114,10 @@ export const HydrationGallery: React.FC = () => {
   };
 
   return (
-    <section id="transformaciones" className="py-20 sm:py-28 border-b border-violet-900/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <section id="transformaciones" className="py-16 sm:py-24 lg:py-28 border-b border-violet-900/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
         {/* Heading */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
+        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
           <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-violet-400 font-semibold">
             <Droplets className="w-3.5 h-3.5" /> Evidencia Visual &amp; Portafolio de Resultados
           </span>
@@ -128,8 +128,8 @@ export const HydrationGallery: React.FC = () => {
             Compara el estado del cabello antes del servicio frente a los resultados reales obtenidos tras el tratamiento en la misma pose y ángulo.
           </p>
 
-          {/* Treatment Case Switcher Tabs */}
-          <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+          {/* Treatment Case Switcher Tabs - Swipeable on mobile */}
+          <div className="flex overflow-x-auto sm:flex-wrap items-center justify-start sm:justify-center gap-2 pt-2 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar">
             {TRANSFORMATION_CASES.map((tc, idx) => (
               <button
                 key={tc.id}
@@ -138,7 +138,7 @@ export const HydrationGallery: React.FC = () => {
                   setActiveCaseIndex(idx);
                   setSliderPos(50);
                 }}
-                className={`px-5 py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all ${
+                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all shrink-0 ${
                   activeCaseIndex === idx
                     ? 'bg-violet-600 text-white shadow-lg shadow-violet-600/30 ring-2 ring-violet-400/50'
                     : isDark
@@ -153,7 +153,7 @@ export const HydrationGallery: React.FC = () => {
         </div>
 
         {/* Interactive Before / After Comparator Container */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
           <div className="lg:col-span-7 space-y-4">
             <div
               ref={containerRef}
@@ -197,26 +197,29 @@ export const HydrationGallery: React.FC = () => {
                     {Math.round(sliderPos)}%
                   </div>
 
-                  {/* Center Drag Handle */}
-                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-gradient-to-br from-[#4C1D95] via-[#6D28D9] to-[#8B5CF6] text-white flex items-center justify-center shadow-2xl border-2 border-white ring-4 ring-violet-500/30 group-hover:scale-110 transition-transform">
-                    <SlidersHorizontal className="w-5 h-5 text-white" />
+                  {/* Center Drag Handle - Responsive size */}
+                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#4C1D95] via-[#6D28D9] to-[#8B5CF6] text-white flex items-center justify-center shadow-2xl border-2 border-white ring-4 ring-violet-500/30 group-hover:scale-110 transition-transform">
+                    <SlidersHorizontal className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                   </div>
                 </div>
 
-                {/* TOP CORNER LABELS */}
-                <div className="absolute top-4 left-4 z-10 px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-black/85 text-amber-200 border border-amber-500/30 backdrop-blur-md shadow-lg flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-amber-400" />
-                  {activeCase.beforeLabel}
+                {/* TOP CORNER LABELS - Responsive labels that don't collide on mobile */}
+                <div className="absolute top-2.5 sm:top-4 left-2.5 sm:left-4 z-10 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-black/85 text-amber-200 border border-amber-500/30 backdrop-blur-md shadow-lg flex items-center gap-1 sm:gap-1.5">
+                  <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-amber-400" />
+                  <span className="hidden sm:inline">{activeCase.beforeLabel}</span>
+                  <span className="sm:hidden">Antes</span>
                 </div>
-                <div className="absolute top-4 right-4 z-10 px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-violet-900/90 text-violet-100 border border-violet-400/50 backdrop-blur-md shadow-lg flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-violet-300" />
-                  {activeCase.afterLabel}
+                <div className="absolute top-2.5 sm:top-4 right-2.5 sm:right-4 z-10 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-violet-900/90 text-violet-100 border border-violet-400/50 backdrop-blur-md shadow-lg flex items-center gap-1 sm:gap-1.5">
+                  <CheckCircle2 className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-violet-300" />
+                  <span className="hidden sm:inline">{activeCase.afterLabel}</span>
+                  <span className="sm:hidden">Después</span>
                 </div>
 
                 {/* BOTTOM FLOATING HINT */}
-                <div className="absolute bottom-3 inset-x-0 flex justify-center pointer-events-none z-10">
-                  <div className="px-3.5 py-1 rounded-full text-[10px] font-semibold text-slate-300 bg-black/60 backdrop-blur-md border border-white/10 flex items-center gap-1.5">
-                    <SlidersHorizontal className="w-3 h-3 text-violet-400" /> Desliza a los lados para comparar
+                <div className="absolute bottom-2.5 sm:bottom-3 inset-x-0 flex justify-center pointer-events-none z-10 px-4">
+                  <div className="px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-semibold text-slate-300 bg-black/60 backdrop-blur-md border border-white/10 flex items-center gap-1.5 text-center">
+                    <SlidersHorizontal className="w-3 h-3 text-violet-400 shrink-0" />
+                    <span>Desliza a los lados para comparar</span>
                   </div>
                 </div>
 
@@ -234,7 +237,7 @@ export const HydrationGallery: React.FC = () => {
             </div>
 
             {/* Quick Preset Buttons for Instant Inspection */}
-            <div className="flex items-center justify-between text-xs px-2 text-slate-400">
+            <div className="flex items-center justify-between text-[11px] sm:text-xs px-2 text-slate-400">
               <button
                 type="button"
                 onClick={() => setSliderPos(95)}
@@ -262,13 +265,13 @@ export const HydrationGallery: React.FC = () => {
           {/* Technical Diagnosis & Results Card */}
           <div className="lg:col-span-5 space-y-6">
             <div
-              className={`p-7 sm:p-8 rounded-3xl border space-y-5 transition-all ${
+              className={`p-5 sm:p-8 rounded-3xl border space-y-4 sm:space-y-5 transition-all ${
                 isDark
                   ? 'bg-[#10101A] border-violet-900/50 shadow-xl shadow-black/40'
                   : 'bg-white border-indigo-200 shadow-xl'
               }`}
             >
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-violet-600/20 text-violet-300 border border-violet-500/30">
                   {activeCase.badge}
                 </span>
@@ -286,7 +289,7 @@ export const HydrationGallery: React.FC = () => {
               </p>
 
               <div
-                className={`p-4 rounded-2xl border text-xs leading-relaxed ${
+                className={`p-3.5 sm:p-4 rounded-2xl border text-xs leading-relaxed ${
                   isDark
                     ? 'bg-[#090910] border-violet-950/80 text-slate-300'
                     : 'bg-indigo-50/60 border-indigo-100 text-slate-700'
@@ -301,14 +304,14 @@ export const HydrationGallery: React.FC = () => {
                 {activeCase.results.map((res, i) => (
                   <div
                     key={i}
-                    className={`p-3 rounded-xl border text-center ${
+                    className={`p-2.5 sm:p-3 rounded-xl border text-center ${
                       isDark
                         ? 'bg-[#141424] border-violet-900/40'
                         : 'bg-slate-50 border-indigo-100'
                     }`}
                   >
-                    <div className="text-[11px] font-bold text-violet-400 truncate">{res.value}</div>
-                    <div className="text-[10px] text-slate-400 leading-tight mt-0.5">{res.label}</div>
+                    <div className="text-[10px] sm:text-[11px] font-bold text-violet-400 truncate">{res.value}</div>
+                    <div className="text-[9px] sm:text-[10px] text-slate-400 leading-tight mt-0.5">{res.label}</div>
                   </div>
                 ))}
               </div>
@@ -326,7 +329,7 @@ export const HydrationGallery: React.FC = () => {
 
               <a
                 href="#agenda"
-                className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-full text-xs font-bold uppercase tracking-widest text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#8B5CF6] shadow-lg shadow-violet-700/30 transition-all"
+                className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-full text-xs font-bold uppercase tracking-widest text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#8B5CF6] shadow-lg shadow-violet-700/30 transition-all text-center"
               >
                 <Calendar className="w-4 h-4" /> Agendar este Servicio a Domicilio
               </a>
@@ -335,8 +338,8 @@ export const HydrationGallery: React.FC = () => {
         </div>
 
         {/* 6 Visual Cards showcasing Diverse Portfolio */}
-        <div className="space-y-6 pt-6">
-          <div className="flex items-center justify-between">
+        <div className="space-y-4 sm:space-y-6 pt-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4">
             <h3 className="font-serif text-2xl font-semibold">
               Servicios Destacados de Portafolio
             </h3>
@@ -345,7 +348,7 @@ export const HydrationGallery: React.FC = () => {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7">
             {GALLERY_ITEMS.map((item) => (
               <div
                 key={item.id}
@@ -355,21 +358,21 @@ export const HydrationGallery: React.FC = () => {
                     : 'bg-white border-indigo-100 hover:border-indigo-300 shadow-md hover:shadow-xl'
                 }`}
               >
-                <div className="relative h-72 overflow-hidden">
+                <div className="relative h-64 sm:h-72 overflow-hidden">
                   <img
                     src={item.imageUrl}
                     alt={item.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#08080C] via-transparent to-transparent opacity-80" />
-                  <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-[#08080C]/80 text-indigo-300 border border-violet-700/50 backdrop-blur-md">
+                  <span className="absolute top-3.5 left-3.5 sm:top-4 sm:left-4 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-[#08080C]/80 text-indigo-300 border border-violet-700/50 backdrop-blur-md">
                     {item.categoryLabel}
                   </span>
                   <span className="absolute bottom-3 right-3 px-2.5 py-1 rounded-md text-[10px] font-semibold bg-violet-700/90 text-white backdrop-blur-md shadow">
                     {item.badgeText}
                   </span>
                 </div>
-                <div className="p-6 space-y-2.5">
+                <div className="p-5 sm:p-6 space-y-2.5">
                   <div className="text-xs text-violet-400 font-semibold uppercase tracking-wider">
                     {item.durationLabel}
                   </div>

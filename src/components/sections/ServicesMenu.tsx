@@ -32,10 +32,10 @@ export const ServicesMenu: React.FC = () => {
   const totalDuration = selectedServices.reduce((acc, s) => acc + s.duration, 0);
 
   return (
-    <section id="servicios" className="py-20 border-b border-violet-900/30">
+    <section id="servicios" className="py-16 sm:py-20 border-b border-violet-900/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
+        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4 mb-8 sm:mb-12">
           <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-violet-400 font-semibold">
             <Scissors className="w-3.5 h-3.5" /> Carta Exclusiva a Domicilio
           </span>
@@ -49,15 +49,15 @@ export const ServicesMenu: React.FC = () => {
           </p>
         </div>
 
-        {/* Category Tabs */}
-        <div className="flex flex-wrap justify-center gap-2.5 mb-12">
+        {/* Category Tabs - Swipeable on mobile */}
+        <div className="flex overflow-x-auto sm:flex-wrap items-center justify-start sm:justify-center gap-2 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar mb-8 sm:mb-12">
           {categories.map((cat) => {
             const isActive = activeFilter === cat;
             return (
               <button
                 key={cat}
                 onClick={() => setActiveFilter(cat)}
-                className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition-all border ${
+                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition-all border shrink-0 ${
                   isActive
                     ? 'bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] text-white border-violet-500 shadow-lg shadow-violet-900/40'
                     : isDark
@@ -72,7 +72,7 @@ export const ServicesMenu: React.FC = () => {
         </div>
 
         {/* Service Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredServices.map((service) => {
             const isSelected = selectedServiceIds.includes(service.id);
 
@@ -80,7 +80,7 @@ export const ServicesMenu: React.FC = () => {
               <div
                 key={service.id}
                 onClick={() => toggleSelectService(service.id)}
-                className={`group cursor-pointer rounded-2xl p-6 border transition-all duration-300 flex flex-col justify-between ${
+                className={`group cursor-pointer rounded-2xl p-4 sm:p-6 border transition-all duration-300 flex flex-col justify-between ${
                   isSelected
                     ? isDark
                       ? 'bg-gradient-to-b from-[#19152E] to-[#11111C] border-violet-500 ring-1 ring-violet-500/50 shadow-xl shadow-violet-950/50'
@@ -90,7 +90,7 @@ export const ServicesMenu: React.FC = () => {
                     : 'bg-white border-indigo-100 hover:border-indigo-300 shadow-sm'
                 }`}
               >
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between gap-2">
                     <span
                       className={`text-[10px] font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded-full ${
@@ -109,8 +109,8 @@ export const ServicesMenu: React.FC = () => {
                     )}
                   </div>
 
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="font-serif text-2xl font-semibold leading-snug group-hover:text-violet-400 transition-colors">
+                  <div className="flex items-start justify-between gap-3 sm:gap-4">
+                    <h3 className="font-serif text-xl sm:text-2xl font-semibold leading-snug group-hover:text-violet-400 transition-colors">
                       {service.name}
                     </h3>
                     <span className="font-serif text-2xl sm:text-3xl font-bold text-violet-400 shrink-0">
@@ -119,7 +119,7 @@ export const ServicesMenu: React.FC = () => {
                   </div>
 
                   <p
-                    className={`text-sm leading-relaxed ${
+                    className={`text-xs sm:text-sm leading-relaxed ${
                       isDark ? 'text-[#C8C8D8]' : 'text-slate-600'
                     }`}
                   >
@@ -127,8 +127,8 @@ export const ServicesMenu: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="pt-6 mt-6 border-t border-violet-900/30 flex items-center justify-between">
-                  <div className="flex items-center gap-3 text-xs text-indigo-300/90">
+                <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t border-violet-900/30 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 sm:gap-3 text-xs text-indigo-300/90">
                     <span className="flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5 text-violet-400" />
                       {service.duration} min
@@ -144,7 +144,7 @@ export const ServicesMenu: React.FC = () => {
                       e.stopPropagation();
                       toggleSelectService(service.id);
                     }}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-all ${
+                    className={`px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-all ${
                       isSelected
                         ? 'bg-violet-600 text-white shadow-md shadow-violet-900/50'
                         : isDark
@@ -170,30 +170,30 @@ export const ServicesMenu: React.FC = () => {
 
         {/* Bottom Floating Summary Bar inside section */}
         {selectedServiceIds.length > 0 && (
-          <div className="mt-10 flex flex-col md:flex-row items-center justify-between gap-4 p-5 sm:p-6 rounded-3xl border border-violet-500/50 bg-gradient-to-r from-[#141126] via-[#1D163B] to-[#141126] text-white shadow-2xl">
+          <div className="mt-8 sm:mt-10 flex flex-col md:flex-row items-center justify-between gap-4 p-4 sm:p-6 rounded-3xl border border-violet-500/50 bg-gradient-to-r from-[#141126] via-[#1D163B] to-[#141126] text-white shadow-2xl">
             <div className="text-center md:text-left space-y-1">
-              <span className="text-[11px] uppercase tracking-[0.22em] text-violet-400 font-bold block">
+              <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-violet-400 font-bold block">
                 ✓ Reflejado en tu Agenda a Domicilio
               </span>
-              <p className="text-base sm:text-lg font-serif font-semibold">
+              <p className="text-sm sm:text-lg font-serif font-semibold">
                 {selectedServices.map((s) => s.name).join(' + ')}
               </p>
               <p className="text-xs text-indigo-200">
                 Total: <strong>${subtotal}</strong> • Duración estimada: <strong>{totalDuration} min</strong> • Traslado incluido
               </p>
             </div>
-            <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3 w-full md:w-auto">
               <button
                 type="button"
                 onClick={clearSelectedServices}
-                className="px-4 py-2.5 rounded-full text-xs font-semibold text-slate-400 hover:text-white border border-violet-900/80 hover:border-violet-700 transition-colors"
+                className="w-full sm:w-auto px-4 py-2.5 rounded-full text-xs font-semibold text-slate-400 hover:text-white border border-violet-900/80 hover:border-violet-700 transition-colors"
               >
                 Limpiar selección
               </button>
               <a
                 href="#agenda"
                 onClick={() => setBookingStep(2)}
-                className="px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#8B5CF6] text-white shadow-lg shadow-violet-900/50 transition-all flex items-center gap-2"
+                className="w-full sm:w-auto px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#8B5CF6] text-white shadow-lg shadow-violet-900/50 transition-all flex items-center justify-center gap-2 text-center"
               >
                 <span>Continuar a Fecha y Hora en la Agenda</span>
                 <span>→</span>

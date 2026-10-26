@@ -179,11 +179,11 @@ export const AdminCMSModal: React.FC = () => {
         ) : (
           <div className="space-y-6">
             {/* Top Navigation Tabs */}
-            <div className="flex flex-wrap items-center gap-2 border-b border-violet-900/30 pb-4">
+            <div className="flex overflow-x-auto sm:flex-wrap items-center gap-2 border-b border-violet-900/30 pb-4 no-scrollbar">
               <button
                 type="button"
                 onClick={() => setActiveTab('turnos')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all ${
+                className={`shrink-0 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all ${
                   activeTab === 'turnos'
                     ? 'bg-violet-600 text-white shadow-md'
                     : isDark
@@ -201,7 +201,7 @@ export const AdminCMSModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveTab('servicios')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all ${
+                className={`shrink-0 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all ${
                   activeTab === 'servicios'
                     ? 'bg-violet-600 text-white shadow-md'
                     : isDark
@@ -216,7 +216,7 @@ export const AdminCMSModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveTab('banco')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all ${
+                className={`shrink-0 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all ${
                   activeTab === 'banco'
                     ? 'bg-violet-600 text-white shadow-md'
                     : isDark
@@ -231,7 +231,7 @@ export const AdminCMSModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveTab('cupon')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all ${
+                className={`shrink-0 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all ${
                   activeTab === 'cupon'
                     ? 'bg-violet-600 text-white shadow-md'
                     : isDark
