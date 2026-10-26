@@ -1,5 +1,4 @@
 import React from 'react';
-import { Sun, Moon } from 'lucide-react';
 import { useSalon } from '../../context/SalonContext';
 
 export const Navbar: React.FC = () => {
@@ -67,23 +66,21 @@ export const Navbar: React.FC = () => {
           </a>
         </nav>
 
-        {/* Actions: Elegant Luxury Theme Switcher + Primary CTA */}
+        {/* Actions: Custom Theme Switcher Button + Primary CTA */}
         <div className="flex items-center gap-3 sm:gap-4">
           <button
             onClick={toggleTheme}
             aria-label="Alternar modo de color"
             title={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
-            className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all ${
-              isDark
-                ? 'bg-[#12121C] border-violet-800/60 text-amber-300 hover:border-amber-400/60 hover:bg-violet-950/60 hover:shadow-[0_0_12px_rgba(251,191,36,0.25)]'
-                : 'bg-indigo-50 border-indigo-200 text-violet-800 hover:bg-indigo-100 hover:border-violet-300'
-            }`}
+            className="w-10 h-10 rounded-full overflow-hidden hover:scale-105 active:scale-95 transition-all border border-indigo-400/50 hover:border-indigo-300 shadow-md hover:shadow-indigo-500/30 flex items-center justify-center shrink-0 cursor-pointer p-0.5 bg-black/20 backdrop-blur-sm"
           >
-            {isDark ? (
-              <Sun className="w-4 h-4 transition-transform duration-300 hover:rotate-45" />
-            ) : (
-              <Moon className="w-4 h-4 transition-transform duration-300 hover:-rotate-12" />
-            )}
+            <img
+              src="/images/theme-toggle.png"
+              alt="Modo claro/oscuro"
+              className={`w-full h-full object-contain rounded-full transition-transform duration-300 ${
+                isDark ? 'hover:rotate-12' : 'hover:-rotate-12'
+              }`}
+            />
           </button>
 
           <a
