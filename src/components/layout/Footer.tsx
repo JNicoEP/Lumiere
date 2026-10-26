@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Lock } from 'lucide-react';
+import { Scissors, Lock } from 'lucide-react';
 import { useSalon } from '../../context/SalonContext';
 import { SOLE_STYLIST } from '../../data/initialData';
 
@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#4C1D95] to-[#7C3AED] flex items-center justify-center">
-            <Sparkles className="w-4 h-4 text-white" />
+            <Scissors className="w-4 h-4 text-white" />
           </div>
           <div>
             <p className="font-serif text-lg font-semibold text-white tracking-[0.2em]">

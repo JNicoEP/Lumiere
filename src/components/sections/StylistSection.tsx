@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, CheckCircle2, Home, Sparkles, Shield } from 'lucide-react';
+import { Award, CheckCircle2, Home, Shield } from 'lucide-react';
 import { useSalon } from '../../context/SalonContext';
 import { SOLE_STYLIST } from '../../data/initialData';
 
@@ -58,7 +58,7 @@ export const StylistSection: React.FC = () => {
                 }`}
               >
                 <div className="flex items-center gap-2 text-violet-400 font-semibold text-sm mb-1">
-                  <Sparkles className="w-4 h-4" /> Especialidad Triple
+                  <Award className="w-4 h-4" /> Especialidad Triple
                 </div>
                 <p className={`text-xs ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                   {SOLE_STYLIST.specialty}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Sun, Moon, CalendarCheck, Home } from 'lucide-react';
+import { Sun, Moon, CalendarCheck, Home } from 'lucide-react';
 import { useSalon } from '../../context/SalonContext';
 
 export const Navbar: React.FC = () => {
@@ -7,8 +7,7 @@ export const Navbar: React.FC = () => {
     isDark,
     toggleTheme,
     bookings,
-    setIsBookingsModalOpen,
-    setIsAdminModalOpen
+    setIsBookingsModalOpen
   } = useSalon();
 
   return (
@@ -20,28 +19,26 @@ export const Navbar: React.FC = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Brand Logo (Double click opens hidden Stylist CMS) */}
-        <div
-          onDoubleClick={() => setIsAdminModalOpen(true)}
-          title="Doble clic para acceso privado de estilista"
-          className="flex items-center gap-3 cursor-pointer select-none group"
+        {/* Brand Name (Click scrolls to top of page) */}
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="flex flex-col cursor-pointer select-none group"
         >
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#4C1D95] via-[#6D28D9] to-[#8B5CF6] flex items-center justify-center shadow-lg shadow-violet-900/40 group-hover:scale-105 transition-transform">
-            <Sparkles className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <span className="font-serif text-xl sm:text-2xl tracking-[0.2em] font-semibold block leading-none bg-gradient-to-r from-indigo-300 via-violet-400 to-indigo-400 bg-clip-text text-transparent">
-              LUMIÈRE
-            </span>
-            <span
-              className={`text-[10px] uppercase tracking-[0.26em] flex items-center gap-1 mt-1 ${
-                isDark ? 'text-indigo-300/80' : 'text-indigo-700'
-              }`}
-            >
-              <Home className="w-3 h-3" /> Haute Coiffure a Domicilio
-            </span>
-          </div>
-        </div>
+          <span className="font-serif text-2xl sm:text-3xl tracking-[0.22em] font-semibold block leading-none bg-gradient-to-r from-indigo-200 via-violet-300 to-indigo-300 bg-clip-text text-transparent group-hover:opacity-90 transition-opacity">
+            LUMIÈRE
+          </span>
+          <span
+            className={`text-[10px] uppercase tracking-[0.28em] flex items-center gap-1 mt-1.5 ${
+              isDark ? 'text-indigo-300/80' : 'text-indigo-700'
+            }`}
+          >
+            <Home className="w-3 h-3" /> Haute Coiffure a Domicilio
+          </span>
+        </a>
 
         {/* Navigation Links */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">

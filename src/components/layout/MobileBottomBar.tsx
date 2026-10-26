@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, CalendarCheck } from 'lucide-react';
+import { CalendarCheck } from 'lucide-react';
 import { useSalon } from '../../context/SalonContext';
 
 export const MobileBottomBar: React.FC = () => {
@@ -26,7 +26,7 @@ export const MobileBottomBar: React.FC = () => {
         href="#agenda"
         className="flex-1 py-3 px-4 rounded-full text-xs font-bold uppercase tracking-widest text-center text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] shadow-lg flex items-center justify-center gap-1.5"
       >
-        <Sparkles className="w-3.5 h-3.5" />
+        <span>📅</span>
         Reservar a Domicilio ({selectedServiceIds.length})
       </a>
     </div>

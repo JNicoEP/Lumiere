@@ -3,7 +3,7 @@ import {
   Calendar,
   Clock,
   MapPin,
-  Sparkles,
+  Award,
   CheckCircle2,
   Tag,
   User,
@@ -612,7 +612,7 @@ export const BookingEngine: React.FC = () => {
                               : 'border-violet-900/40 opacity-70'
                           }`}
                         >
-                          <Sparkles className="w-3.5 h-3.5 mb-1" />
+                          <Award className="w-3.5 h-3.5 mb-1" />
                           Total (-5% VIP)
                         </button>
                       </div>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Sparkles, SlidersHorizontal, Droplets, CheckCircle2, Eye, ShieldCheck, Zap } from 'lucide-react';
+import { SlidersHorizontal, Droplets, CheckCircle2, Eye, ShieldCheck, Scissors, Calendar } from 'lucide-react';
 import { useSalon } from '../../context/SalonContext';
 import { GALLERY_ITEMS } from '../../data/initialData';
 
@@ -11,8 +11,6 @@ interface TransformationCase {
   badge: string;
   afterImage: string;
   beforeImage: string;
-  beforeStyle?: React.CSSProperties;
-  afterStyle?: React.CSSProperties;
   beforeLabel: string;
   afterLabel: string;
   results: { label: string; value: string }[];
@@ -21,73 +19,55 @@ interface TransformationCase {
 
 const TRANSFORMATION_CASES: TransformationCase[] = [
   {
-    id: 'case-hialuronico',
-    tabLabel: '1. Brillo Espejo & Seda',
-    title: 'Ritual Criogénico de Ácido Hialurónico',
-    subtitle: 'Cabello castaño/moreno: de fibra opaca, porosa y con frizz a una caída líquida ultra brillante.',
-    badge: 'Tratamiento Estrella',
-    afterImage: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1400&q=85',
-    beforeImage: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1400&q=85',
-    beforeStyle: {
-      filter: 'grayscale(45%) contrast(80%) brightness(88%) sepia(20%)',
-    },
-    afterStyle: {
-      filter: 'saturate(115%) contrast(110%) brightness(102%)',
-    },
-    beforeLabel: 'Antes: Cutícula abierta, porosidad y frizz',
-    afterLabel: 'Después: Brillo espejo líquido y tacto seda',
-    results: [
-      { label: 'Brillo Reflejado', value: '+99% Espejo' },
-      { label: 'Frizz / Humedad', value: '0% Blindado' },
-      { label: 'Sellado de Cutícula', value: '100% Hermético' }
-    ],
-    diagnosis: 'El ácido hialurónico molecular penetra el córtex deshidratado mientras la proteína de seda sella la cutícula exterior, reflejando la luz en un ángulo uniforme de 360 grados.'
-  },
-  {
-    id: 'case-balayage',
-    tabLabel: '2. Rubio & Decoloración',
-    title: 'Cura Botánica de Lípidos & Caviar para Rubios',
-    subtitle: 'Melena rubia procesada: restauración de elasticidad, eliminación del tacto áspero y luminosidad limpia.',
-    badge: 'Nutrición Nupcial',
-    afterImage: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=85',
-    beforeImage: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=85',
-    beforeStyle: {
-      filter: 'grayscale(35%) contrast(75%) brightness(82%) blur(0.3px)',
-    },
-    afterStyle: {
-      filter: 'saturate(110%) contrast(108%)',
-    },
-    beforeLabel: 'Antes: Fibra decolorada reseca y puntas abiertas',
-    afterLabel: 'Después: Ondas elásticas, tacto cachemira y luz dorada',
-    results: [
-      { label: 'Elasticidad Capilar', value: '+85% Resistencia' },
-      { label: 'Puntas Selladas', value: 'Cierre Total' },
-      { label: 'Protección Térmica', value: 'Hasta 230°C' }
-    ],
-    diagnosis: 'La decoloración vacía las reservas lipídicas del tallo capilar. La infusión de caviar restablece los puentes disulfuro y deposita ceramidas biocompatibles sin aportar peso ni apelmazar.'
-  },
-  {
-    id: 'case-curly',
-    tabLabel: '3. Rizos & Definición',
-    title: 'Spa Oxigenante & Sellado Hidrolipídico',
-    subtitle: 'Texturas onduladas y rizadas: de encrespamiento incontrolado a bucles suaves, esponjosos y definidos.',
-    badge: 'Anti-Frizz Total',
-    afterImage: 'https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=1400&q=85',
+    id: 'case-hidratacion',
+    tabLabel: '1. Hidratación',
+    title: 'Tratamiento de Hidratación Profunda & Seda',
+    subtitle: 'Antes: Pelo maltratado, seco, opaco y con frizz visible. Después: Pelo profundamente hidratado, suave, nutrido y con caída sedosa.',
+    badge: 'Hidratación Profunda',
     beforeImage: 'https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=1400&q=85',
-    beforeStyle: {
-      filter: 'grayscale(30%) contrast(85%) brightness(90%)',
-    },
-    afterStyle: {
-      filter: 'contrast(108%) saturate(115%)',
-    },
-    beforeLabel: 'Antes: Rizo deshidratado y sin patrón definido',
-    afterLabel: 'Después: Bucle esculpido con rebote elástico',
+    afterImage: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1400&q=85',
+    beforeLabel: 'Antes: Pelo Seco y Maltratado',
+    afterLabel: 'Después: Pelo Tratado e Hidratado',
     results: [
-      { label: 'Definición de Rizo', value: 'Máximo Rebote' },
-      { label: 'Retención de Humedad', value: '72 Horas' },
-      { label: 'Sensación al Tacto', value: 'Aterciopelada' }
+      { label: 'Nutrición Capilar', value: '100% Restaurado' },
+      { label: 'Control de Frizz', value: 'Sin Enredos' },
+      { label: 'Cutícula Sellada', value: 'Suavidad Seda' }
     ],
-    diagnosis: 'Mediante vapor ozonizado portátil a domicilio, dilatamos la hebra para nutrir con micro-aceites de argán y camelia, culminando con enfriamiento iónico para fijar el patrón del rizo.'
+    diagnosis: 'Diagnóstico previo y aplicación de mascarilla termolipídica con ácido hialurónico y vaporizador ozonizado portátil a domicilio.'
+  },
+  {
+    id: 'case-corte',
+    tabLabel: '2. Corte de Pelo',
+    title: 'Corte de Autor & Visagismo de Precisión',
+    subtitle: 'Antes: Melena larga sin forma, puntas abiertas y peso desbalanceado. Después: Corte con arquitectura limpia, movimiento fluido y contornos que estilizan el rostro.',
+    badge: 'Corte de Autor',
+    beforeImage: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=85',
+    afterImage: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1400&q=85',
+    beforeLabel: 'Antes: Melena Sin Forma',
+    afterLabel: 'Después: Corte Estructurado',
+    results: [
+      { label: 'Visagismo', value: 'A Medida' },
+      { label: 'Puntas Saneadas', value: '100% Cierre' },
+      { label: 'Movimiento Natural', value: 'Ligero y Fluido' }
+    ],
+    diagnosis: 'Estudio de la morfología del rostro y corte milimétrico en seco y húmedo con tijeras de precisión en tu propio domicilio.'
+  },
+  {
+    id: 'case-rizos',
+    tabLabel: '3. Rizos & Definición',
+    title: 'Nutrición Hidrolipídica & Definición de Rizos',
+    subtitle: 'Antes: Rizo rebelde, encrespado, con frizz y sin patrón definido. Después: Rizos hidratados desde el interior, elásticos y esculpidos con definición natural.',
+    badge: 'Rizos & Ondas',
+    beforeImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1400&q=85',
+    afterImage: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1400&q=85',
+    beforeLabel: 'Antes: Rizo Rebelde & Con Frizz',
+    afterLabel: 'Después: Rizo Definido & Nutrito',
+    results: [
+      { label: 'Definición de Rizo', value: 'Rebote Natural' },
+      { label: 'Retención de Humedad', value: 'Hasta 72h' },
+      { label: 'Tacto Capilar', value: 'Aterciopelado' }
+    ],
+    diagnosis: 'Lavado botánico con ampolla concentrada, activación de bucles mechón a mechón y secado con difusor iónico profesional.'
   }
 ];
 
@@ -100,7 +80,7 @@ export const HydrationGallery: React.FC = () => {
 
   const activeCase = TRANSFORMATION_CASES[activeCaseIndex];
 
-  // Precise pointer calculation for buttery smooth dragging
+  // Precise pointer calculation for smooth dragging
   const handlePointerMove = useCallback(
     (clientX: number) => {
       if (!containerRef.current) return;
@@ -142,11 +122,10 @@ export const HydrationGallery: React.FC = () => {
             <Droplets className="w-3.5 h-3.5" /> Evidencia Visual &amp; Portafolio de Resultados
           </span>
           <h2 className="font-serif text-3xl sm:text-5xl font-semibold tracking-tight">
-            Deslizador de Transformación en Vivo
+            Deslizador de Transformación Antes y Después
           </h2>
           <p className={`text-sm sm:text-base ${isDark ? 'text-[#C8C8D8]' : 'text-slate-600'}`}>
-            Arrastra el comparador central para inspeccionar la diferencia microscópica entre una
-            fibra capilar deshidratada y la luminosidad de un cabello sellado con ácido hialurónico y seda.
+            Compara el estado del cabello antes del servicio frente a los resultados reales obtenidos tras el tratamiento en tu domicilio.
           </p>
 
           {/* Treatment Case Switcher Tabs */}
@@ -159,7 +138,7 @@ export const HydrationGallery: React.FC = () => {
                   setActiveCaseIndex(idx);
                   setSliderPos(50);
                 }}
-                className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all ${
+                className={`px-5 py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all ${
                   activeCaseIndex === idx
                     ? 'bg-violet-600 text-white shadow-lg shadow-violet-600/30 ring-2 ring-violet-400/50'
                     : isDark
@@ -187,18 +166,14 @@ export const HydrationGallery: React.FC = () => {
               }`}
             >
               <div className="relative aspect-[16/11] w-full overflow-hidden">
-                {/* AFTER LAYER (FULL CONTAINER BASE) */}
+                {/* AFTER LAYER (FULL CONTAINER BASE - REAL PHOTOGRAPH) */}
                 <img
                   src={activeCase.afterImage}
                   alt={activeCase.afterLabel}
-                  style={activeCase.afterStyle}
-                  className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none transition-transform duration-700"
+                  className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
                 />
 
-                {/* Subtle Luxury Gloss Overlay on After side */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-violet-950/20 via-transparent to-indigo-500/10 pointer-events-none" />
-
-                {/* BEFORE LAYER (CLIPPED WITH EXACT MATCHING SCALE) */}
+                {/* BEFORE LAYER (CLIPPED PHOTO - REAL PHOTOGRAPH) */}
                 <div
                   className="absolute inset-0 overflow-hidden pointer-events-none select-none"
                   style={{
@@ -208,11 +183,8 @@ export const HydrationGallery: React.FC = () => {
                   <img
                     src={activeCase.beforeImage}
                     alt={activeCase.beforeLabel}
-                    style={activeCase.beforeStyle}
                     className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
                   />
-                  {/* Texture Simulation Tint for Before */}
-                  <div className="absolute inset-0 bg-black/15 mix-blend-multiply pointer-events-none" />
                 </div>
 
                 {/* DIVIDER LINE WITH GLOW & CENTER HANDLE */}
@@ -226,25 +198,25 @@ export const HydrationGallery: React.FC = () => {
                   </div>
 
                   {/* Center Drag Handle */}
-                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-gradient-to-br from-[#4C1D95] via-[#6D28D9] to-[#8B5CF6] text-white flex items-center justify-center shadow-2xl border-2 border-white ring-4 ring-violet-500/30 group-hover:scale-110 transition-transform">
+                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-gradient-to-br from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] text-white flex items-center justify-center shadow-2xl border-2 border-white ring-4 ring-violet-500/30 group-hover:scale-110 transition-transform">
                     <SlidersHorizontal className="w-5 h-5 text-white" />
                   </div>
                 </div>
 
                 {/* TOP CORNER LABELS */}
-                <div className="absolute top-4 left-4 z-10 px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-black/80 text-amber-200 border border-amber-500/30 backdrop-blur-md shadow-lg flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-                  Antes (Sin Hidratar)
+                <div className="absolute top-4 left-4 z-10 px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-black/85 text-amber-200 border border-amber-500/30 backdrop-blur-md shadow-lg flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
+                  {activeCase.beforeLabel}
                 </div>
-                <div className="absolute top-4 right-4 z-10 px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-violet-900/85 text-violet-100 border border-violet-400/50 backdrop-blur-md shadow-lg flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-violet-300" />
-                  Después (Seda Espejo)
+                <div className="absolute top-4 right-4 z-10 px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-violet-900/90 text-violet-100 border border-violet-400/50 backdrop-blur-md shadow-lg flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-violet-300" />
+                  {activeCase.afterLabel}
                 </div>
 
                 {/* BOTTOM FLOATING HINT */}
                 <div className="absolute bottom-3 inset-x-0 flex justify-center pointer-events-none z-10">
                   <div className="px-3.5 py-1 rounded-full text-[10px] font-semibold text-slate-300 bg-black/60 backdrop-blur-md border border-white/10 flex items-center gap-1.5">
-                    <SlidersHorizontal className="w-3 h-3 text-violet-400" /> Desliza a los lados para inspeccionar
+                    <SlidersHorizontal className="w-3 h-3 text-violet-400" /> Desliza a los lados para comparar
                   </div>
                 </div>
 
@@ -255,7 +227,7 @@ export const HydrationGallery: React.FC = () => {
                   max={98}
                   value={sliderPos}
                   onChange={(e) => setSliderPos(Number(e.target.value))}
-                  aria-label="Comparador de hidratación capilar antes y después"
+                  aria-label="Comparador de cabello antes y después"
                   className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-30"
                 />
               </div>
@@ -282,12 +254,12 @@ export const HydrationGallery: React.FC = () => {
                 onClick={() => setSliderPos(5)}
                 className="hover:text-violet-300 transition-colors flex items-center gap-1"
               >
-                100% Después <Sparkles className="w-3.5 h-3.5" />
+                100% Después
               </button>
             </div>
           </div>
 
-          {/* Technical Diagnosis & Scientific Results Card */}
+          {/* Technical Diagnosis & Results Card */}
           <div className="lg:col-span-5 space-y-6">
             <div
               className={`p-7 sm:p-8 rounded-3xl border space-y-5 transition-all ${
@@ -301,7 +273,7 @@ export const HydrationGallery: React.FC = () => {
                   {activeCase.badge}
                 </span>
                 <span className="text-[11px] text-violet-400 font-bold uppercase tracking-wider flex items-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5" /> Garantía de Efecto
+                  <ShieldCheck className="w-3.5 h-3.5" /> Garantía de Satisfacción
                 </span>
               </div>
 
@@ -320,7 +292,7 @@ export const HydrationGallery: React.FC = () => {
                     : 'bg-indigo-50/60 border-indigo-100 text-slate-700'
                 }`}
               >
-                <strong className="text-violet-400 block mb-1">Mecanismo de Acción a Domicilio:</strong>
+                <strong className="text-violet-400 block mb-1">Procedimiento en tu Domicilio:</strong>
                 {activeCase.diagnosis}
               </div>
 
@@ -344,11 +316,11 @@ export const HydrationGallery: React.FC = () => {
               <div className="space-y-2 pt-2">
                 <div className="flex items-center gap-2 text-xs text-slate-300">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Equipo de ozonoterapia portátil esterilizado para tu domicilio</span>
+                  <span>Equipo esterilizado y maletín profesional en tu residencia</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-slate-300">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Lavado capilar con agua templada y secado con seda anti-fricción</span>
+                  <span>Cuidado de toallas, secado anti-fricción y sin dejar residuos</span>
                 </div>
               </div>
 
@@ -356,7 +328,7 @@ export const HydrationGallery: React.FC = () => {
                 href="#agenda"
                 className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-full text-xs font-bold uppercase tracking-widest text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#8B5CF6] shadow-lg shadow-violet-700/30 transition-all"
               >
-                <Zap className="w-4 h-4" /> Agendar este Ritual a Domicilio
+                <Calendar className="w-4 h-4" /> Agendar este Servicio a Domicilio
               </a>
             </div>
           </div>
@@ -368,8 +340,8 @@ export const HydrationGallery: React.FC = () => {
             <h3 className="font-serif text-2xl font-semibold">
               Servicios Destacados de Portafolio
             </h3>
-            <span className="text-xs uppercase tracking-wider text-violet-400 font-semibold">
-              3 Especialidades Exclusivas
+            <span className="text-xs uppercase tracking-wider text-violet-400 font-semibold flex items-center gap-1.5">
+              <Scissors className="w-3.5 h-3.5" /> 3 Especialidades Exclusivas
             </span>
           </div>
 

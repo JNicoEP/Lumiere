@@ -1,10 +1,10 @@
 import React from 'react';
-import { Sparkles, MapPin, ShieldCheck, Clock, ArrowRight } from 'lucide-react';
+import { MapPin, ShieldCheck, Clock, Award } from 'lucide-react';
 import { useSalon } from '../../context/SalonContext';
 import { SOLE_STYLIST } from '../../data/initialData';
 
 export const HeroSection: React.FC = () => {
-  const { isDark, promo } = useSalon();
+  const { isDark } = useSalon();
 
   return (
     <section className="relative overflow-hidden py-16 sm:py-24 lg:py-28 border-b border-violet-900/30">
@@ -46,46 +46,13 @@ export const HeroSection: React.FC = () => {
               sin traslados ni esperas.
             </p>
 
-            {/* Active Promo Banner if enabled by Stylist in CMS */}
-            {promo.active && promo.code && (
-              <div
-                className={`p-4 rounded-2xl border flex flex-wrap items-center justify-between gap-3 ${
-                  isDark
-                    ? 'bg-gradient-to-r from-indigo-950/70 via-violet-950/60 to-indigo-950/70 border-violet-700/50'
-                    : 'bg-indigo-50/90 border-indigo-300'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 rounded-lg bg-violet-600 text-white text-xs font-bold tracking-widest uppercase">
-                    -{promo.discountPercent}% OFF
-                  </span>
-                  <div className="text-xs sm:text-sm">
-                    <span className="font-semibold block">
-                      {promo.description || 'Beneficio Especial a Domicilio'}
-                    </span>
-                    <span className={isDark ? 'text-indigo-200/80' : 'text-indigo-800'}>
-                      Usa la palabra clave{' '}
-                      <code className="font-mono font-bold underline">{promo.code}</code> en el
-                      Paso 3 de tu reserva.
-                    </span>
-                  </div>
-                </div>
-                <a
-                  href="#agenda"
-                  className="text-xs font-semibold uppercase tracking-wider text-violet-400 hover:text-violet-300 flex items-center gap-1"
-                >
-                  Aplicar ahora <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            )}
-
             {/* Primary & Secondary CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+            <div className="flex flex-col sm:row gap-4 pt-4">
               <a
                 href="#agenda"
-                className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full text-sm font-semibold uppercase tracking-widest text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#8B5CF6] shadow-xl shadow-violet-900/50 transition-all"
+                className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full text-sm font-semibold uppercase tracking-widest text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#8B5CF6] shadow-xl shadow-violet-900/50 transition-all"
               >
-                <Sparkles className="w-4 h-4" />
+                <span className="text-base">📅</span>
                 Agendar Cita a Domicilio
               </a>
               <a
@@ -121,7 +88,7 @@ export const HeroSection: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-start gap-2.5">
-                <Sparkles className="w-5 h-5 text-violet-400 shrink-0 mt-0.5" />
+                <Award className="w-5 h-5 text-violet-400 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wider">Alta Cosmética</p>
                   <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, Check, Plus, Sparkles, Home } from 'lucide-react';
+import { Clock, Check, Plus, Scissors, Home } from 'lucide-react';
 import { useSalon } from '../../context/SalonContext';
 import { ServiceCategory } from '../../types/salon.types';
 import { CATEGORY_LABELS } from '../../data/initialData';
@@ -26,7 +26,7 @@ export const ServicesMenu: React.FC = () => {
         {/* Section Heading */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
           <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-violet-400 font-semibold">
-            <Sparkles className="w-3.5 h-3.5" /> Carta Exclusiva a Domicilio
+            <Scissors className="w-3.5 h-3.5" /> Carta Exclusiva a Domicilio
           </span>
           <h2 className="font-serif text-3xl sm:text-5xl font-semibold">
             Menú de Servicios &amp; Tarifas Transparentes

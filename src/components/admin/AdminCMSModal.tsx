@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Lock, Save, Plus, Trash2, RotateCcw, Tag, Sparkles } from 'lucide-react';
+import { X, Lock, Save, Plus, Trash2, RotateCcw, Tag, Scissors } from 'lucide-react';
 import { useSalon } from '../../context/SalonContext';
 import { ServiceCategory } from '../../types/salon.types';
 import { CATEGORY_LABELS } from '../../data/initialData';
@@ -188,7 +188,7 @@ export const AdminCMSModal: React.FC = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h4 className="font-serif text-2xl font-semibold flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-violet-400" /> Editar Servicios Existentes (En
+                  <Scissors className="w-5 h-5 text-violet-400" /> Editar Servicios Existentes (En
                   Vivo)
                 </h4>
                 <button
