@@ -14,7 +14,7 @@ Plataforma web e interactiva de reservas a domicilio y gestión interna (CMS) de
 3. **Comparador Interactivo Antes / Después de Hidratación**:
    - Deslizador visual de fibra capilar opaca/deshidratada vs. cabello con hidratación profunda y brillo espejo.
 4. **Sistema Gestor Oculto para la Estilista (CMS en Vivo)**:
-   - Acceso discreto haciendo **doble clic en el logo superior** o pulsando el botón `🔒 π` en el pie de página (PIN por defecto: `1234`).
+   - Acceso discreto haciendo **doble clic en el logo superior** o pulsando el botón `🔒 π` en el pie de página.
    - Permite editar en caliente el nombre, descripción, duración y precio de cualquier servicio, crear nuevos servicios y personalizar la **palabra clave de descuento** y su porcentaje (ej. `HIDRATA20` con `20%` OFF).
 
 ## 📁 Arquitectura del Proyecto
