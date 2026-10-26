@@ -59,7 +59,10 @@ export const BookingsModal: React.FC = () => {
                   <span className="text-xs font-bold text-violet-400">
                     Turno #{b.id} — {b.date} ({b.time} hs)
                   </span>
-                  <span className="text-xs font-bold">${b.finalTotal.toFixed(2)}</span>
+                  <div className="text-right">
+                    <span className="text-xs font-bold block">Total: ${b.finalTotal.toFixed(2)}</span>
+                    <span className="text-[10px] text-violet-400 font-semibold block">Seña 30%: ${b.amountPaidNow.toFixed(2)}</span>
+                  </div>
                 </div>
                 <p className="text-xs font-medium flex items-center gap-1">
                   <MapPin className="w-3.5 h-3.5 text-violet-400" /> {b.clientAddress}

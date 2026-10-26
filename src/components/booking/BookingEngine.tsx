@@ -3,7 +3,6 @@ import {
   Calendar,
   Clock,
   MapPin,
-  Award,
   CheckCircle2,
   Tag,
   User,
@@ -28,7 +27,7 @@ export const BookingEngine: React.FC = () => {
 
   const availableDays = useMemo(() => getNextAvailableDays(7), []);
   const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [selectedDate, setSelectedDate] = useState<string>(availableDays[0].iso);
+  const [selectedDate, setSelectedDate] = useState<string>(availableDays[0]?.iso || '');
   const [selectedTime, setSelectedTime] = useState<string>('11:00');
 
   // Client Details (At-home service)
@@ -36,7 +35,6 @@ export const BookingEngine: React.FC = () => {
   const [clientPhone, setClientPhone] = useState('');
   const [clientAddress, setClientAddress] = useState('');
   const [clientNotes, setClientNotes] = useState('');
-  const [paymentMode, setPaymentMode] = useState<'deposit' | 'full'>('deposit');
 
   // Promo Code State
   const [couponInput, setCouponInput] = useState('');
@@ -70,18 +68,16 @@ export const BookingEngine: React.FC = () => {
       promo.active &&
       appliedCoupon.toUpperCase() === promo.code.toUpperCase()
     ) {
-      return (subtotal * promo.discountPercent) / 100;
+      return Number(((subtotal * promo.discountPercent) / 100).toFixed(2));
     }
     return 0;
   }, [appliedCoupon, promo, subtotal]);
 
-  const subtotalAfterPromo = Math.max(0, subtotal - promoDiscountAmount);
-
-  // Additional 5% off if paying full amount upfront
-  const vipDiscountAmount = paymentMode === 'full' ? subtotalAfterPromo * 0.05 : 0;
-  const finalTotal = Math.max(0, subtotalAfterPromo - vipDiscountAmount);
-  const amountPaidNow = paymentMode === 'deposit' ? finalTotal * 0.3 : finalTotal;
-  const pendingBalance = Math.max(0, finalTotal - amountPaidNow);
+  // Clean and exact 30% deposit calculation
+  const finalTotal = Math.max(0, Number((subtotal - promoDiscountAmount).toFixed(2)));
+  const depositAmount = Number((finalTotal * 0.3).toFixed(2));
+  const amountPaidNow = depositAmount;
+  const pendingBalance = Math.max(0, Number((finalTotal - depositAmount).toFixed(2)));
 
   const handleApplyCoupon = () => {
     const clean = couponInput.trim().toUpperCase();
@@ -119,11 +115,11 @@ export const BookingEngine: React.FC = () => {
       clientPhone: clientPhone.trim(),
       clientAddress: clientAddress.trim(),
       clientNotes: clientNotes.trim(),
-      paymentMode,
+      paymentMode: 'deposit',
       subtotal,
       promoCodeApplied: promoDiscountAmount > 0 ? promo.code : null,
       promoDiscountAmount,
-      vipDiscountAmount,
+      vipDiscountAmount: 0,
       finalTotal,
       amountPaidNow,
       pendingBalance
@@ -134,7 +130,7 @@ export const BookingEngine: React.FC = () => {
   };
 
   return (
-    <section id="agenda" className="py-20">
+    <section id="agenda" className="py-20 sm:py-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
@@ -163,7 +159,7 @@ export const BookingEngine: React.FC = () => {
               <span className="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-violet-600 text-white">
                 Turno Confirmado #{confirmedBooking.id}
               </span>
-              <CheckCircle2 className="w-8 h-8 text-violet-400" />
+              <CheckCircle2 className="w-8 h-8 text-emerald-400" />
             </div>
 
             <h3 className="font-serif text-3xl font-semibold">
@@ -171,22 +167,22 @@ export const BookingEngine: React.FC = () => {
             </h3>
 
             <div
-              className={`p-5 rounded-2xl border space-y-2.5 text-sm ${
+              className={`p-6 rounded-2xl border space-y-3 text-sm ${
                 isDark ? 'bg-[#08080C] border-violet-900/50' : 'bg-indigo-50/60 border-indigo-200'
               }`}
             >
               <p>
-                <strong>Estilista Asignada:</strong> {SOLE_STYLIST.name}
+                <strong>Estilista:</strong> {SOLE_STYLIST.name}
               </p>
               <p>
                 <strong>Fecha y Hora:</strong> {confirmedBooking.date} a las{' '}
                 {confirmedBooking.time} hs
               </p>
               <p>
-                <strong>Dirección del Domicilio / Hotel:</strong> {confirmedBooking.clientAddress}
+                <strong>Dirección a Domicilio:</strong> {confirmedBooking.clientAddress}
               </p>
               <p>
-                <strong>Servicios:</strong>{' '}
+                <strong>Servicios Seleccionados:</strong>{' '}
                 {confirmedBooking.services.map((s) => s.name).join(', ')}
               </p>
               {confirmedBooking.promoCodeApplied && (
@@ -195,11 +191,25 @@ export const BookingEngine: React.FC = () => {
                   {confirmedBooking.promoDiscountAmount.toFixed(2)}
                 </p>
               )}
-              <div className="pt-2 border-t border-violet-900/30 flex justify-between font-bold text-base">
-                <span>Total Final: ${confirmedBooking.finalTotal.toFixed(2)}</span>
-                <span className="text-violet-400">
-                  Abonado ahora: ${confirmedBooking.amountPaidNow.toFixed(2)}
-                </span>
+
+              {/* Exact Deposit Breakdown */}
+              <div className="pt-3 border-t border-violet-900/40 space-y-2">
+                <div className="flex justify-between text-slate-300">
+                  <span>Costo Total de Servicios:</span>
+                  <span className="font-semibold">${confirmedBooking.finalTotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center p-3 rounded-xl bg-violet-600/20 border border-violet-500/50 text-violet-200">
+                  <span className="font-bold">Seña para confirmar (30%):</span>
+                  <span className="text-lg font-bold text-violet-300">
+                    ${confirmedBooking.amountPaidNow.toFixed(2)}
+                  </span>
+                </div>
+                <div className="flex justify-between text-xs text-slate-400 px-1">
+                  <span>Saldo a abonar en tu domicilio (70%):</span>
+                  <span className="font-semibold text-slate-200">
+                    ${confirmedBooking.pendingBalance.toFixed(2)}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -208,9 +218,9 @@ export const BookingEngine: React.FC = () => {
                 href={buildWhatsAppBookingUrl(confirmedBooking, SOLE_STYLIST.name)}
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 py-3.5 px-6 rounded-full text-xs font-bold uppercase tracking-widest text-center text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:opacity-95 shadow-lg"
+                className="flex-1 py-3.5 px-6 rounded-full text-xs font-bold uppercase tracking-widest text-center text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:opacity-95 shadow-lg flex items-center justify-center gap-2"
               >
-                Enviar Comprobante por WhatsApp
+                <span>💬</span> Enviar Comprobante por WhatsApp
               </a>
               <button
                 type="button"
@@ -235,7 +245,7 @@ export const BookingEngine: React.FC = () => {
               {[
                 { num: 1, title: '1. Servicios a Domicilio' },
                 { num: 2, title: '2. Día & Horario' },
-                { num: 3, title: '3. Domicilio & Descuento' }
+                { num: 3, title: '3. Domicilio & Seña (30%)' }
               ].map((s) => (
                 <button
                   key={s.num}
@@ -285,7 +295,7 @@ export const BookingEngine: React.FC = () => {
                       >
                         <div className="space-y-1">
                           <span className="text-[10px] uppercase tracking-widest text-violet-400 font-bold">
-                            {CATEGORY_LABELS[srv.category]}
+                            {CATEGORY_LABELS[srv.category] || srv.category}
                           </span>
                           <h4 className="font-serif text-xl font-semibold">{srv.name}</h4>
                           <p className="text-xs text-slate-400 line-clamp-2">{srv.description}</p>
@@ -317,7 +327,7 @@ export const BookingEngine: React.FC = () => {
             {/* STEP 2: DATE, TIME & SOLE STYLIST */}
             {step === 2 && (
               <div className="space-y-8">
-                {/* Sole Stylist Confirmation Card */}
+                {/* Stylist Profile Card */}
                 <div
                   className={`p-4 rounded-2xl border flex items-center gap-4 ${
                     isDark
@@ -374,9 +384,9 @@ export const BookingEngine: React.FC = () => {
                 {/* Time Slots */}
                 <div className="space-y-3">
                   <label className="text-xs font-bold uppercase tracking-widest text-indigo-300 block">
-                    Horarios Disponibles a Domicilio
+                    Horario de Llegada Estimado a tu Domicilio
                   </label>
-                  <div className="grid grid-cols-3 sm:grid-cols-7 gap-2.5">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5">
                     {AVAILABLE_TIME_SLOTS.map((slot) => {
                       const active = selectedTime === slot;
                       return (
@@ -419,12 +429,12 @@ export const BookingEngine: React.FC = () => {
               </div>
             )}
 
-            {/* STEP 3: AT-HOME ADDRESS, CUSTOM PROMO CODE & PAYMENT */}
+            {/* STEP 3: AT-HOME ADDRESS, PROMO CODE & EXACT 30% DEPOSIT */}
             {step === 3 && (
               <form onSubmit={handleConfirmBooking} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div className="lg:col-span-7 space-y-4">
                   <h3 className="font-serif text-2xl sm:text-3xl font-semibold">
-                    Paso 3: Datos de Envío a Domicilio
+                    Paso 3: Datos de tu Domicilio
                   </h3>
 
                   <div>
@@ -492,7 +502,7 @@ export const BookingEngine: React.FC = () => {
 
                   <div>
                     <label className="text-xs font-semibold uppercase tracking-wider block mb-1.5">
-                      Indicaciones Adicionales (Largo del pelo, estacionamiento, etc.)
+                      Indicaciones Adicionales (Largo del pelo, timbre, etc.)
                     </label>
                     <div className="relative">
                       <MessageSquare className="w-4 h-4 text-violet-400 absolute left-3.5 top-3.5" />
@@ -500,7 +510,7 @@ export const BookingEngine: React.FC = () => {
                         rows={2}
                         value={clientNotes}
                         onChange={(e) => setClientNotes(e.target.value)}
-                        placeholder="Ej. Cabello hasta media espalda, timbre 4B..."
+                        placeholder="Ej. Cabello hasta media espalda, portero 4B..."
                         className={`w-full pl-10 pr-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:border-violet-500 ${
                           isDark
                             ? 'bg-[#08080C] border-violet-900/60 text-white'
@@ -553,7 +563,7 @@ export const BookingEngine: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Summary & Payment Column */}
+                {/* Summary & Seña 30% Payment Column */}
                 <div className="lg:col-span-5 space-y-4">
                   <div
                     className={`p-6 rounded-2xl border space-y-4 ${
@@ -563,10 +573,10 @@ export const BookingEngine: React.FC = () => {
                     }`}
                   >
                     <h4 className="font-serif text-2xl font-semibold border-b border-violet-900/30 pb-2">
-                      Resumen de tu Cita a Domicilio
+                      Resumen de tu Visita
                     </h4>
 
-                    <div className="text-xs space-y-1">
+                    <div className="text-xs space-y-1 text-slate-300">
                       <p>
                         <strong>Estilista:</strong> {SOLE_STYLIST.name}
                       </p>
@@ -585,45 +595,28 @@ export const BookingEngine: React.FC = () => {
                       ))}
                     </div>
 
-                    {/* Payment Mode Selector */}
-                    <div className="space-y-2 pt-3 border-t border-violet-900/30">
-                      <label className="text-xs font-bold uppercase tracking-wider block text-indigo-300">
-                        Modalidad de Reserva
-                      </label>
-                      <div className="grid grid-cols-2 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setPaymentMode('deposit')}
-                          className={`p-2.5 rounded-xl border text-xs font-semibold text-left ${
-                            paymentMode === 'deposit'
-                              ? 'border-violet-500 bg-violet-600/20 text-violet-300'
-                              : 'border-violet-900/40 opacity-70'
-                          }`}
-                        >
-                          <CreditCard className="w-3.5 h-3.5 mb-1" />
-                          Seña 30% Ahora
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setPaymentMode('full')}
-                          className={`p-2.5 rounded-xl border text-xs font-semibold text-left ${
-                            paymentMode === 'full'
-                              ? 'border-violet-500 bg-violet-600/20 text-violet-300'
-                              : 'border-violet-900/40 opacity-70'
-                          }`}
-                        >
-                          <Award className="w-3.5 h-3.5 mb-1" />
-                          Total (-5% VIP)
-                        </button>
+                    {/* Seña Policy Card */}
+                    <div
+                      className={`p-3.5 rounded-xl border space-y-1.5 text-xs ${
+                        isDark ? 'bg-[#141424] border-violet-700/40' : 'bg-white border-indigo-200'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 font-bold text-violet-400">
+                        <CreditCard className="w-3.5 h-3.5" />
+                        <span>Seña de Reserva (30%)</span>
                       </div>
+                      <p className="text-[11px] text-slate-400 leading-relaxed">
+                        Para confirmar el turno a domicilio se abona únicamente la seña del 30%. El 70% restante se abona en mano o transferencia al finalizar el servicio.
+                      </p>
                     </div>
 
-                    {/* Totals Breakdown */}
-                    <div className="space-y-1.5 pt-3 border-t border-violet-900/30 text-xs">
-                      <div className="flex justify-between">
-                        <span>Subtotal servicios:</span>
+                    {/* Breakdown */}
+                    <div className="space-y-2 pt-2 border-t border-violet-900/30 text-xs">
+                      <div className="flex justify-between text-slate-400">
+                        <span>Subtotal de servicios:</span>
                         <span>${subtotal.toFixed(2)}</span>
                       </div>
+
                       {promoDiscountAmount > 0 && (
                         <div className="flex justify-between text-emerald-400 font-semibold">
                           <span>
@@ -632,19 +625,26 @@ export const BookingEngine: React.FC = () => {
                           <span>-${promoDiscountAmount.toFixed(2)}</span>
                         </div>
                       )}
-                      {vipDiscountAmount > 0 && (
-                        <div className="flex justify-between text-indigo-300 font-semibold">
-                          <span>Bonificación Pago Total (5%):</span>
-                          <span>-${vipDiscountAmount.toFixed(2)}</span>
-                        </div>
-                      )}
-                      <div className="flex justify-between text-base font-bold pt-2 border-t border-violet-900/30">
-                        <span>Total Final:</span>
-                        <span className="text-violet-400">${finalTotal.toFixed(2)}</span>
+
+                      <div className="flex justify-between text-slate-300 pt-1 border-t border-violet-900/20 font-medium">
+                        <span>Costo Total del Servicio:</span>
+                        <span className="font-bold text-white">${finalTotal.toFixed(2)}</span>
                       </div>
-                      <div className="flex justify-between text-xs font-semibold text-indigo-300">
-                        <span>A abonar ahora para confirmar:</span>
-                        <span>${amountPaidNow.toFixed(2)}</span>
+
+                      <div className="flex justify-between items-center p-3 rounded-xl bg-violet-600/20 border border-violet-500/40 text-violet-300">
+                        <span className="font-bold text-xs uppercase tracking-wider">
+                          Seña a transferir ahora (30%):
+                        </span>
+                        <span className="text-xl font-serif font-bold text-violet-300">
+                          ${depositAmount.toFixed(2)}
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between text-xs text-slate-400 px-1">
+                        <span>Saldo restante en domicilio (70%):</span>
+                        <span className="font-semibold text-slate-300">
+                          ${pendingBalance.toFixed(2)}
+                        </span>
                       </div>
                     </div>
 
@@ -652,15 +652,15 @@ export const BookingEngine: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setStep(2)}
-                        className="px-4 py-3 rounded-full text-xs font-bold uppercase border border-violet-800"
+                        className="px-4 py-3 rounded-full text-xs font-bold uppercase border border-violet-800 text-slate-300"
                       >
                         ← Atrás
                       </button>
                       <button
                         type="submit"
-                        className="flex-1 py-3.5 px-5 rounded-full text-xs font-bold uppercase tracking-widest text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#8B5CF6] shadow-lg"
+                        className="flex-1 py-3.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#8B5CF6] shadow-lg flex items-center justify-center gap-1.5"
                       >
-                        Confirmar Cita a Domicilio
+                        Confirmar Cita (Seña: ${depositAmount.toFixed(2)})
                       </button>
                     </div>
                   </div>

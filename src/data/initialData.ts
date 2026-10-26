@@ -93,7 +93,7 @@ export const INITIAL_PROMO: PromoConfig = {
 
 export const SOLE_STYLIST: StylistProfile = {
   id: 'stylist-valentina',
-  name: 'Valentina Laurent',
+  name: 'Valentina',
   role: 'Directora Creativa & Especialista en Estilismo Privado a Domicilio',
   specialty: 'Peinados de Alta Costura para Eventos, Cortes de Visagismo & Hidratación Molecular',
   bio: 'Con más de 12 años de experiencia en backstages de moda en París y Madrid, Valentina traslada la excelencia técnica, higiene rigurosa y herramientas de vanguardia directamente a la privacidad de tu residencia o suite de hotel.',
@@ -111,29 +111,56 @@ export const GALLERY_ITEMS: GalleryCardItem[] = [
   {
     id: 'gal-1',
     categoryLabel: 'Peinados para Eventos',
-    title: 'Ondas Glamour & Recogido de Gala a Domicilio',
-    description: 'Preparación integral en tu domicilio u hotel con fijación flexible de larga duración y brillo tridimensional para noches inolvidables.',
-    durationLabel: '75 min en tu domicilio',
+    title: 'Ondas Glamour Hollywood & Brillo Seda',
+    description: 'Preparación integral en tu domicilio con fijación flexible de larga duración resistente a la humedad y brillo tridimensional.',
+    durationLabel: '60 min en tu domicilio',
     imageUrl: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=85',
-    badgeText: 'Alta Fijación & Brillo'
+    badgeText: 'Alta Fijación'
   },
   {
     id: 'gal-2',
+    categoryLabel: 'Peinados para Eventos',
+    title: 'Recogido de Gala & Novias a Domicilio',
+    description: 'Diseño de alta costura estructurado o descontracturado en tu suite o residencia, con fijación invisible y colocación de tocado.',
+    durationLabel: '75 min en tu domicilio',
+    imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=85',
+    badgeText: 'Novias & Gala'
+  },
+  {
+    id: 'gal-3',
+    categoryLabel: 'Cortes de Pelo',
+    title: 'French Bob / Clavicut de Precisión',
+    description: 'Líneas geométricas depuradas y contornos elegantes que estilizan el cuello y rejuvenecen la expresión con acabado pulido.',
+    durationLabel: '60 min en tu domicilio',
+    imageUrl: 'https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?auto=format&fit=crop&w=900&q=85',
+    badgeText: 'Estilo Editorial'
+  },
+  {
+    id: 'gal-4',
     categoryLabel: 'Cortes de Pelo',
     title: 'Corte de Autor & Capas Invisibles con Movimiento',
-    description: 'Arquitectura capilar personalizada según tus facciones, logrando una caída fluida y puntas perfectamente selladas.',
+    description: 'Arquitectura capilar personalizada según tus facciones, logrando una caída fluida, volumen equilibrado y puntas selladas.',
     durationLabel: '60 min en tu domicilio',
     imageUrl: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=900&q=85',
     badgeText: 'Visagismo a Medida'
   },
   {
-    id: 'gal-3',
+    id: 'gal-5',
     categoryLabel: 'Hidratación Profunda',
     title: 'Terapia de Seda & Ácido Hialurónico Molecular',
-    description: 'Reconstrucción de la barrera lipídica para transformar hebras secas y sin vida en una melena sedosa con reflejo espejo.',
+    description: 'Reconstrucción profunda de la fibra porosa para transformar hebras secas en una melena nutrida con caída líquida y brillo.',
     durationLabel: '60 min en tu domicilio',
-    imageUrl: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=900&q=85',
+    imageUrl: 'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=900&q=85',
     badgeText: 'Nutrición Celular'
+  },
+  {
+    id: 'gal-6',
+    categoryLabel: 'Hidratación Profunda',
+    title: 'Método Curly: Nutrición & Definición de Rizos',
+    description: 'Activación y nutrición intensiva de ondas y rizos con ampolla lipídica y difusor iónico para bucles esponjosos y elásticos.',
+    durationLabel: '65 min en tu domicilio',
+    imageUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=85',
+    badgeText: 'Definición Natural'
   }
 ];
 

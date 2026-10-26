@@ -22,12 +22,12 @@ const TRANSFORMATION_CASES: TransformationCase[] = [
     id: 'case-hidratacion',
     tabLabel: '1. Hidratación',
     title: 'Tratamiento de Hidratación Profunda & Seda',
-    subtitle: 'Antes: Pelo maltratado, seco, opaco y con frizz visible. Después: Pelo profundamente hidratado, suave, nutrido y con caída sedosa.',
+    subtitle: 'Misma pose y ángulo: a la izquierda el cabello reseco, deshidratado y con frizz natural; a la derecha la transformación con nutrición profunda y textura líquida.',
     badge: 'Hidratación Profunda',
-    beforeImage: 'https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=1400&q=85',
-    afterImage: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1400&q=85',
-    beforeLabel: 'Antes: Pelo Seco y Maltratado',
-    afterLabel: 'Después: Pelo Tratado e Hidratado',
+    beforeImage: '/images/transformations/hidratacion-before.jpg',
+    afterImage: '/images/transformations/hidratacion-after.jpg',
+    beforeLabel: 'Antes: Cabello Seco y Maltratado',
+    afterLabel: 'Después: Hidratación Profunda',
     results: [
       { label: 'Nutrición Capilar', value: '100% Restaurado' },
       { label: 'Control de Frizz', value: 'Sin Enredos' },
@@ -39,10 +39,10 @@ const TRANSFORMATION_CASES: TransformationCase[] = [
     id: 'case-corte',
     tabLabel: '2. Corte de Pelo',
     title: 'Corte de Autor & Visagismo de Precisión',
-    subtitle: 'Antes: Melena larga sin forma, puntas abiertas y peso desbalanceado. Después: Corte con arquitectura limpia, movimiento fluido y contornos que estilizan el rostro.',
+    subtitle: 'Misma pose y ángulo: a la izquierda melena sin forma con puntas abiertas; a la derecha corte estructurado en capas con visagismo y contornos limpios.',
     badge: 'Corte de Autor',
-    beforeImage: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=85',
-    afterImage: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1400&q=85',
+    beforeImage: '/images/transformations/corte-before.jpg',
+    afterImage: '/images/transformations/corte-after.jpg',
     beforeLabel: 'Antes: Melena Sin Forma',
     afterLabel: 'Después: Corte Estructurado',
     results: [
@@ -56,10 +56,10 @@ const TRANSFORMATION_CASES: TransformationCase[] = [
     id: 'case-rizos',
     tabLabel: '3. Rizos & Definición',
     title: 'Nutrición Hidrolipídica & Definición de Rizos',
-    subtitle: 'Antes: Rizo rebelde, encrespado, con frizz y sin patrón definido. Después: Rizos hidratados desde el interior, elásticos y esculpidos con definición natural.',
+    subtitle: 'Misma pose y ángulo: a la izquierda rizos esponjados sin definición; a la derecha rizos nutridos desde el interior con elasticidad y rebote.',
     badge: 'Rizos & Ondas',
-    beforeImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1400&q=85',
-    afterImage: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1400&q=85',
+    beforeImage: '/images/transformations/rizos-before.jpg',
+    afterImage: '/images/transformations/rizos-after.jpg',
     beforeLabel: 'Antes: Rizo Rebelde & Con Frizz',
     afterLabel: 'Después: Rizo Definido & Nutrito',
     results: [
@@ -125,7 +125,7 @@ export const HydrationGallery: React.FC = () => {
             Deslizador de Transformación Antes y Después
           </h2>
           <p className={`text-sm sm:text-base ${isDark ? 'text-[#C8C8D8]' : 'text-slate-600'}`}>
-            Compara el estado del cabello antes del servicio frente a los resultados reales obtenidos tras el tratamiento en tu domicilio.
+            Compara el estado del cabello antes del servicio frente a los resultados reales obtenidos tras el tratamiento en la misma pose y ángulo.
           </p>
 
           {/* Treatment Case Switcher Tabs */}
@@ -198,7 +198,7 @@ export const HydrationGallery: React.FC = () => {
                   </div>
 
                   {/* Center Drag Handle */}
-                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-gradient-to-br from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] text-white flex items-center justify-center shadow-2xl border-2 border-white ring-4 ring-violet-500/30 group-hover:scale-110 transition-transform">
+                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-gradient-to-br from-[#4C1D95] via-[#6D28D9] to-[#8B5CF6] text-white flex items-center justify-center shadow-2xl border-2 border-white ring-4 ring-violet-500/30 group-hover:scale-110 transition-transform">
                     <SlidersHorizontal className="w-5 h-5 text-white" />
                   </div>
                 </div>
@@ -334,18 +334,18 @@ export const HydrationGallery: React.FC = () => {
           </div>
         </div>
 
-        {/* 3 Visual Cards aligned strictly with the 3 Service Categories */}
+        {/* 6 Visual Cards showcasing Diverse Portfolio */}
         <div className="space-y-6 pt-6">
           <div className="flex items-center justify-between">
             <h3 className="font-serif text-2xl font-semibold">
               Servicios Destacados de Portafolio
             </h3>
             <span className="text-xs uppercase tracking-wider text-violet-400 font-semibold flex items-center gap-1.5">
-              <Scissors className="w-3.5 h-3.5" /> 3 Especialidades Exclusivas
+              <Scissors className="w-3.5 h-3.5" /> 6 Trabajos Exclusivos en Residencias
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
             {GALLERY_ITEMS.map((item) => (
               <div
                 key={item.id}

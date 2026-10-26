@@ -1,25 +1,39 @@
 import { BookingRecord } from '../types/salon.types';
 
 export function formatCurrency(amount: number): string {
-  return `$${amount.toFixed(0)}`;
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0
+  }).format(amount);
 }
 
-export function getNextAvailableDays(count = 7): { iso: string; dayName: string; dayNumber: string; monthName: string }[] {
-  const days = [];
-  const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-  const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+export interface AvailableDay {
+  iso: string;
+  dayName: string;
+  dayNumber: number;
+  monthName: string;
+}
 
-  for (let i = 0; i < count; i++) {
-    const d = new Date();
-    d.setDate(d.getDate() + i);
-    const iso = d.toISOString().split('T')[0];
-    days.push({
-      iso,
-      dayName: i === 0 ? 'Hoy' : dayNames[d.getDay()],
-      dayNumber: String(d.getDate()).padStart(2, '0'),
-      monthName: monthNames[d.getMonth()],
-    });
+export function getNextAvailableDays(count: number = 7): AvailableDay[] {
+  const days: AvailableDay[] = [];
+  const today = new Date();
+
+  for (let i = 1; i <= count + 4; i++) {
+    const nextDate = new Date(today);
+    nextDate.setDate(today.getDate() + i);
+
+    // Skip Sundays (0) if stylist prefers resting
+    if (nextDate.getDay() !== 0) {
+      const iso = nextDate.toISOString().split('T')[0];
+      const dayName = nextDate.toLocaleDateString('es-ES', { weekday: 'short' });
+      const dayNumber = nextDate.getDate();
+      const monthName = nextDate.toLocaleDateString('es-ES', { month: 'short' });
+      days.push({ iso, dayName, dayNumber, monthName });
+      if (days.length === count) break;
+    }
   }
+
   return days;
 }
 
@@ -39,9 +53,9 @@ export function buildWhatsAppBookingUrl(booking: BookingRecord, stylistName: str
     `👤 *Clienta:* ${booking.clientName}%0A` +
     `----------------------------------%0A` +
     `💇‍♀️ *Servicios Seleccionados:*%0A${serviceNames}${promoText}%0A` +
-    `💳 *Total Final:* $${booking.finalTotal.toFixed(2)}%0A` +
-    `✅ *Abonado Ahora:* $${booking.amountPaidNow.toFixed(2)}%0A` +
-    `⏳ *Saldo en Domicilio:* $${booking.pendingBalance.toFixed(2)}`;
+    `💵 *Costo Total del Servicio:* $${booking.finalTotal.toFixed(2)}%0A` +
+    `💳 *Seña Requerida (30% para confirmar):* $${booking.amountPaidNow.toFixed(2)}%0A` +
+    `⏳ *Saldo Restante en Domicilio (70%):* $${booking.pendingBalance.toFixed(2)}`;
 
   const cleanPhone = booking.clientPhone.replace(/[^0-9]/g, '') || '34600000000';
   return `https://wa.me/${cleanPhone}?text=${message}`;
