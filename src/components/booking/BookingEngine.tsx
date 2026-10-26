@@ -8,7 +8,9 @@ import {
   User,
   Phone,
   CreditCard,
-  MessageSquare
+  MessageSquare,
+  Copy,
+  Check
 } from 'lucide-react';
 import { useSalon } from '../../context/SalonContext';
 import { AVAILABLE_TIME_SLOTS, SOLE_STYLIST, CATEGORY_LABELS } from '../../data/initialData';
@@ -22,7 +24,8 @@ export const BookingEngine: React.FC = () => {
     selectedServiceIds,
     toggleSelectService,
     promo,
-    addBooking
+    addBooking,
+    bankInfo
   } = useSalon();
 
   const availableDays = useMemo(() => getNextAvailableDays(7), []);
@@ -35,6 +38,7 @@ export const BookingEngine: React.FC = () => {
   const [clientPhone, setClientPhone] = useState('');
   const [clientAddress, setClientAddress] = useState('');
   const [clientNotes, setClientNotes] = useState('');
+  const [copiedAlias, setCopiedAlias] = useState(false);
 
   // Promo Code State
   const [couponInput, setCouponInput] = useState('');
@@ -78,6 +82,14 @@ export const BookingEngine: React.FC = () => {
   const depositAmount = Number((finalTotal * 0.3).toFixed(2));
   const amountPaidNow = depositAmount;
   const pendingBalance = Math.max(0, Number((finalTotal - depositAmount).toFixed(2)));
+
+  const handleCopyAlias = () => {
+    if (navigator?.clipboard) {
+      navigator.clipboard.writeText(bankInfo.alias);
+      setCopiedAlias(true);
+      setTimeout(() => setCopiedAlias(false), 2500);
+    }
+  };
 
   const handleApplyCoupon = () => {
     const clean = couponInput.trim().toUpperCase();
@@ -157,7 +169,7 @@ export const BookingEngine: React.FC = () => {
           >
             <div className="flex items-center justify-between">
               <span className="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-violet-600 text-white">
-                Turno Confirmado #{confirmedBooking.id}
+                Turno Solicitado #{confirmedBooking.id}
               </span>
               <CheckCircle2 className="w-8 h-8 text-emerald-400" />
             </div>
@@ -199,7 +211,7 @@ export const BookingEngine: React.FC = () => {
                   <span className="font-semibold">${confirmedBooking.finalTotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 rounded-xl bg-violet-600/20 border border-violet-500/50 text-violet-200">
-                  <span className="font-bold">Seña para confirmar (30%):</span>
+                  <span className="font-bold">Seña requerida para confirmar (30%):</span>
                   <span className="text-lg font-bold text-violet-300">
                     ${confirmedBooking.amountPaidNow.toFixed(2)}
                   </span>
@@ -210,6 +222,33 @@ export const BookingEngine: React.FC = () => {
                     ${confirmedBooking.pendingBalance.toFixed(2)}
                   </span>
                 </div>
+              </div>
+
+              {/* Bank Details Card in Confirmation */}
+              <div
+                className={`p-4 rounded-xl border space-y-2 text-xs ${
+                  isDark ? 'bg-[#121220] border-violet-800/60' : 'bg-white border-indigo-200'
+                }`}
+              >
+                <div className="flex items-center justify-between font-bold text-violet-400">
+                  <span>Datos Bancarios para Transferir la Seña:</span>
+                  <span className="text-[11px] text-slate-400">{bankInfo.banco}</span>
+                </div>
+                <p className="text-slate-300 text-[11px]"><strong>Titular:</strong> {bankInfo.titular}</p>
+                <div className="flex items-center justify-between p-2 rounded-lg bg-black/40 border border-violet-900/40">
+                  <div>
+                    <span className="text-[10px] text-slate-400 block">Alias de transferencia:</span>
+                    <code className="font-mono font-bold text-violet-300">{bankInfo.alias}</code>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleCopyAlias}
+                    className="px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-violet-600 hover:bg-violet-500 text-white flex items-center gap-1 transition-colors"
+                  >
+                    {copiedAlias ? <><Check className="w-3 h-3 text-emerald-300" /> ¡Copiado!</> : <><Copy className="w-3 h-3" /> Copiar</>}
+                  </button>
+                </div>
+                <p className="text-[11px] text-slate-400"><strong>CBU/CVU:</strong> <span className="font-mono">{bankInfo.cbu}</span></p>
               </div>
             </div>
 
@@ -429,7 +468,7 @@ export const BookingEngine: React.FC = () => {
               </div>
             )}
 
-            {/* STEP 3: AT-HOME ADDRESS, PROMO CODE & EXACT 30% DEPOSIT */}
+            {/* STEP 3: AT-HOME ADDRESS, PROMO CODE & EXACT 30% DEPOSIT WITH BANK CARD */}
             {step === 3 && (
               <form onSubmit={handleConfirmBooking} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div className="lg:col-span-7 space-y-4">
@@ -595,21 +634,6 @@ export const BookingEngine: React.FC = () => {
                       ))}
                     </div>
 
-                    {/* Seña Policy Card */}
-                    <div
-                      className={`p-3.5 rounded-xl border space-y-1.5 text-xs ${
-                        isDark ? 'bg-[#141424] border-violet-700/40' : 'bg-white border-indigo-200'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5 font-bold text-violet-400">
-                        <CreditCard className="w-3.5 h-3.5" />
-                        <span>Seña de Reserva (30%)</span>
-                      </div>
-                      <p className="text-[11px] text-slate-400 leading-relaxed">
-                        Para confirmar el turno a domicilio se abona únicamente la seña del 30%. El 70% restante se abona en mano o transferencia al finalizar el servicio.
-                      </p>
-                    </div>
-
                     {/* Breakdown */}
                     <div className="space-y-2 pt-2 border-t border-violet-900/30 text-xs">
                       <div className="flex justify-between text-slate-400">
@@ -646,6 +670,35 @@ export const BookingEngine: React.FC = () => {
                           ${pendingBalance.toFixed(2)}
                         </span>
                       </div>
+                    </div>
+
+                    {/* Copyable Bank Transfer Card */}
+                    <div
+                      className={`p-3.5 rounded-xl border space-y-2 text-xs ${
+                        isDark ? 'bg-[#121220] border-violet-800/60' : 'bg-white border-indigo-200'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between font-bold text-violet-400">
+                        <span className="flex items-center gap-1.5">
+                          <CreditCard className="w-3.5 h-3.5" /> Datos para transferir la seña:
+                        </span>
+                        <span className="text-[10px] text-slate-400">{bankInfo.banco}</span>
+                      </div>
+                      <p className="text-slate-300 text-[11px]"><strong>Titular:</strong> {bankInfo.titular}</p>
+                      <div className="flex items-center justify-between p-2 rounded-lg bg-black/40 border border-violet-900/40">
+                        <div>
+                          <span className="text-[10px] text-slate-400 block">Alias de transferencia:</span>
+                          <code className="font-mono font-bold text-violet-300">{bankInfo.alias}</code>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleCopyAlias}
+                          className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-violet-600 hover:bg-violet-500 text-white flex items-center gap-1 transition-colors"
+                        >
+                          {copiedAlias ? <><Check className="w-3 h-3 text-emerald-300" /> ¡Copiado!</> : <><Copy className="w-3 h-3" /> Copiar</>}
+                        </button>
+                      </div>
+                      <p className="text-[10px] text-slate-400"><strong>CBU/CVU:</strong> <span className="font-mono">{bankInfo.cbu}</span></p>
                     </div>
 
                     <div className="flex gap-2 pt-2">

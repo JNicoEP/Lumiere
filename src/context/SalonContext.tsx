@@ -1,7 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { ServiceItem, PromoConfig, BookingRecord } from '../types/salon.types';
+import { ServiceItem, PromoConfig, BookingRecord, BankPaymentInfo } from '../types/salon.types';
 import { INITIAL_SERVICES, INITIAL_PROMO } from '../data/initialData';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+
+export const DEFAULT_BANK_INFO: BankPaymentInfo = {
+  titular: 'Valentina',
+  alias: 'lumiere.coiffure',
+  cbu: '0000003100012345678901',
+  banco: 'Mercado Pago / Transferencia Bancaria',
+  whatsappPhone: '+34 600 123 456'
+};
 
 interface SalonContextType {
   isDark: boolean;
@@ -13,6 +21,8 @@ interface SalonContextType {
   resetCatalogToDefaults: () => void;
   promo: PromoConfig;
   updatePromo: (newPromo: PromoConfig) => void;
+  bankInfo: BankPaymentInfo;
+  updateBankInfo: (newInfo: BankPaymentInfo) => void;
   selectedServiceIds: string[];
   toggleSelectService: (id: string) => void;
   clearSelectedServices: () => void;
@@ -30,6 +40,7 @@ export const SalonProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isDark, setIsDark] = useLocalStorage<boolean>('atelier_violette_theme_dark', true);
   const [services, setServices] = useLocalStorage<ServiceItem[]>('atelier_violette_services_v1', INITIAL_SERVICES);
   const [promo, setPromo] = useLocalStorage<PromoConfig>('atelier_violette_promo_v1', INITIAL_PROMO);
+  const [bankInfo, setBankInfo] = useLocalStorage<BankPaymentInfo>('lumiere_bank_info_v1', DEFAULT_BANK_INFO);
   const [bookings, setBookings] = useLocalStorage<BookingRecord[]>('atelier_violette_bookings_v1', []);
   const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>(['hidratacion-1']);
   const [isBookingsModalOpen, setIsBookingsModalOpen] = useState(false);
@@ -84,6 +95,10 @@ export const SalonProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   };
 
+  const updateBankInfo = (newInfo: BankPaymentInfo) => {
+    setBankInfo(newInfo);
+  };
+
   const toggleSelectService = (id: string) => {
     setSelectedServiceIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
@@ -108,6 +123,8 @@ export const SalonProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         resetCatalogToDefaults,
         promo,
         updatePromo,
+        bankInfo,
+        updateBankInfo,
         selectedServiceIds,
         toggleSelectService,
         clearSelectedServices,

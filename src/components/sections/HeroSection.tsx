@@ -47,7 +47,7 @@ export const HeroSection: React.FC = () => {
             </p>
 
             {/* Primary & Secondary CTAs */}
-            <div className="flex flex-col sm:row gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <a
                 href="#agenda"
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full text-sm font-semibold uppercase tracking-widest text-white bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#8B5CF6] shadow-xl shadow-violet-900/50 transition-all"
@@ -117,9 +117,16 @@ export const HeroSection: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#08080C] via-[#08080C]/30 to-transparent" />
 
                 <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
-                  <span className="px-3.5 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-widest bg-[#08080C]/85 text-indigo-200 border border-violet-700/50 backdrop-blur-md">
-                    Haute Coiffure Mobile
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <img
+                      src="/images/emblem-lumiere.jpg"
+                      alt="Lumière Emblem"
+                      className="w-8 h-8 rounded-full object-cover border border-violet-400/60 shadow-md"
+                    />
+                    <span className="px-3.5 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-widest bg-[#08080C]/85 text-indigo-200 border border-violet-700/50 backdrop-blur-md">
+                      Haute Coiffure Mobile
+                    </span>
+                  </div>
                   <span className="px-3 py-1 rounded-full text-xs font-bold bg-violet-600 text-white">
                     ★ 5.0
                   </span>

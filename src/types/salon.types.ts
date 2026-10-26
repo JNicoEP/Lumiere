@@ -58,3 +58,11 @@ export interface GalleryCardItem {
   imageUrl: string;
   badgeText: string;
 }
+
+export interface BankPaymentInfo {
+  titular: string;
+  alias: string;
+  cbu: string;
+  banco: string;
+  whatsappPhone: string;
+}

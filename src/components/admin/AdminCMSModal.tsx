@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Lock, Save, Plus, Trash2, RotateCcw, Tag, Scissors, CheckCircle2, AlertCircle, Clock, DollarSign } from 'lucide-react';
+import { X, Lock, Save, Plus, Trash2, RotateCcw, Tag, Scissors, CheckCircle2, AlertCircle, Clock, DollarSign, CreditCard } from 'lucide-react';
 import { useSalon } from '../../context/SalonContext';
 import { ServiceCategory } from '../../types/salon.types';
 import { CATEGORY_LABELS } from '../../data/initialData';
@@ -15,7 +15,9 @@ export const AdminCMSModal: React.FC = () => {
     deleteService,
     resetCatalogToDefaults,
     promo,
-    updatePromo
+    updatePromo,
+    bankInfo,
+    updateBankInfo
   } = useSalon();
 
   const [pinInput, setPinInput] = useState('');
@@ -350,7 +352,93 @@ export const AdminCMSModal: React.FC = () => {
               </div>
             </div>
 
-            {/* 3. Catalog Management with Category Tabs */}
+            {/* 3. Bank Transfer & Contact Configuration */}
+            <div
+              className={`p-6 rounded-3xl border space-y-4 ${
+                isDark ? 'bg-[#08080C] border-violet-800/60' : 'bg-indigo-50/70 border-indigo-200'
+              }`}
+            >
+              <h4 className="font-serif text-xl font-semibold flex items-center gap-2">
+                <CreditCard className="w-5 h-5 text-violet-400" /> Configurar Datos Bancarios para la Seña (30%)
+              </h4>
+              <p className="text-xs text-slate-400">
+                Estos datos son los que verá la clienta para transferir la seña y asegurar su turno.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div>
+                  <label className="text-xs uppercase font-semibold block mb-1 text-slate-400">
+                    Alias de Transferencia
+                  </label>
+                  <input
+                    type="text"
+                    value={bankInfo.alias}
+                    onChange={(e) => updateBankInfo({ ...bankInfo, alias: e.target.value.trim() })}
+                    className={`w-full px-3 py-2 rounded-xl border font-mono text-sm ${
+                      isDark ? 'bg-[#12121E] border-violet-800 text-white' : 'bg-white border-indigo-300'
+                    }`}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs uppercase font-semibold block mb-1 text-slate-400">
+                    CBU / CVU
+                  </label>
+                  <input
+                    type="text"
+                    value={bankInfo.cbu}
+                    onChange={(e) => updateBankInfo({ ...bankInfo, cbu: e.target.value.trim() })}
+                    className={`w-full px-3 py-2 rounded-xl border font-mono text-sm ${
+                      isDark ? 'bg-[#12121E] border-violet-800 text-white' : 'bg-white border-indigo-300'
+                    }`}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs uppercase font-semibold block mb-1 text-slate-400">
+                    Banco / Billetera
+                  </label>
+                  <input
+                    type="text"
+                    value={bankInfo.banco}
+                    onChange={(e) => updateBankInfo({ ...bankInfo, banco: e.target.value })}
+                    className={`w-full px-3 py-2 rounded-xl border text-sm ${
+                      isDark ? 'bg-[#12121E] border-violet-800 text-white' : 'bg-white border-indigo-300'
+                    }`}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs uppercase font-semibold block mb-1 text-slate-400">
+                    Titular de la Cuenta
+                  </label>
+                  <input
+                    type="text"
+                    value={bankInfo.titular}
+                    onChange={(e) => updateBankInfo({ ...bankInfo, titular: e.target.value })}
+                    className={`w-full px-3 py-2 rounded-xl border text-sm ${
+                      isDark ? 'bg-[#12121E] border-violet-800 text-white' : 'bg-white border-indigo-300'
+                    }`}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs uppercase font-semibold block mb-1 text-slate-400">
+                    WhatsApp de Atención
+                  </label>
+                  <input
+                    type="text"
+                    value={bankInfo.whatsappPhone}
+                    onChange={(e) => updateBankInfo({ ...bankInfo, whatsappPhone: e.target.value })}
+                    className={`w-full px-3 py-2 rounded-xl border text-sm ${
+                      isDark ? 'bg-[#12121E] border-violet-800 text-white' : 'bg-white border-indigo-300'
+                    }`}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* 4. Catalog Management with Category Tabs */}
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
